@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Human Performance Lab</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+
+    <!-- =========================
+         TOP NAVIGATION
+    ========================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-title">
+                HUMAN PERFORMANCE LAB
+            </div>
+
+            <div class="brand-subtitle">
+                PERSONAL PERFORMANCE SYSTEM
+            </div>
+        </div>
+
+        <div class="system-status">
+            <span class="status-dot"></span>
+            LOCAL MODE
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN APPLICATION
+    ========================== -->
+
+    <main class="app-container">
+
+
+        <!-- =========================
+             HERO / DASHBOARD
+        ========================== -->
+
+        <section class="hero-section">
+
+            <div class="hero-content">
+
+                <p class="eyebrow">
+                    PERFORMANCE LAB / 001
+                </p>
+
+                <h1>
+                    Build your body.<br>
+                    Understand the system.
+                </h1>
+
+                <p class="hero-description">
+                    A personal training laboratory for developing
+                    strength, endurance, mobility, stability,
+                    coordination and long-term physical capability.
+                </p>
+
+            </div>
+
+
+            <!-- TODAY CARD -->
+
+            <div class="today-card">
+
+                <p class="card-label">
+                    TODAY
+                </p>
+
+                <h2 id="todayCategory">
+                    PUSH
+                </h2>
+
+                <p id="todayDescription">
+                    Upper-body pushing strength and control.
+                </p>
+
+                <div class="today-line"></div>
+
+                <span id="todayDay">
+                    MONDAY
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             WEEKLY STRUCTURE
+        ========================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div>
+                    <p class="eyebrow">
+                        WEEKLY STRUCTURE
+                    </p>
+
+                    <h2>
+                        Your Training Week
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="week-grid">
+
+                <button class="day-card active"
+                        data-day="Monday">
+
+                    <span>MON</span>
+                    <strong>Push</strong>
+
+                </button>
+
+
+                <button class="day-card"
+                        data-day="Tuesday">
+
+                    <span>TUE</span>
+                    <strong>Pull</strong>
+
+                </button>
+
+
+                <button class="day-card"
+                        data-day="Wednesday">
+
+                    <span>WED</span>
+                    <strong>Legs + Core</strong>
+
+                </button>
+
+
+                <button class="day-card"
+                        data-day="Thursday">
+
+                    <span>THU</span>
+                    <strong>Flex + Mobility</strong>
+
+                </button>
+
+
+                <button class="day-card"
+                        data-day="Friday">
+
+                    <span>FRI</span>
+                    <strong>Stability</strong>
+
+                </button>
+
+
+                <button class="day-card"
+                        data-day="Saturday">
+
+                    <span>SAT</span>
+                    <strong>Endurance</strong>
+
+                </button>
+
+
+                <button class="day-card"
+                        data-day="Sunday">
+
+                    <span>SUN</span>
+                    <strong>Recovery</strong>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             QUICK STATS
+        ========================== -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <span>
+                    TRAINING DAYS
+                </span>
+
+                <strong id="trainingDays">
+                    0
+                </strong>
+
+                <small>
+                    This week
+                </small>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    EXERCISES
+                </span>
+
+                <strong id="exerciseCount">
+                    0
+                </strong>
+
+                <small>
+                    Available
+                </small>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    SESSIONS
+                </span>
+
+                <strong id="sessionCount">
+                    0
+                </strong>
+
+                <small>
+                    Completed
+                </small>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    STORAGE
+                </span>
+
+                <strong>
+                    LOCAL
+                </strong>
+
+                <small>
+                    Works offline
+                </small>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             CURRENT SESSION
+        ========================== -->
+
+        <section class="section session-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        CURRENT SESSION
+                    </p>
+
+                    <h2 id="sessionTitle">
+                        Push Training
+                    </h2>
+
+                </div>
+
+
+                <button
+                    id="startWorkoutBtn"
+                    class="primary-button">
+
+                    START SESSION
+
+                </button>
+
+            </div>
+
+
+            <!-- EXERCISE LIST -->
+
+            <div
+                id="exerciseList"
+                class="exercise-list">
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        +
+                    </div>
+
+                    <h3>
+                        No exercises selected
+                    </h3>
+
+                    <p>
+                        Your workout builder will appear here.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="history-section">
+
+    <div class="section-label">
+        TRAINING HISTORY
+    </div>
+
+    <h2>Your Training Record</h2>
+
+    <p class="section-description">
+        Every completed session is stored locally
+        on this device and remains available offline.
+    </p>
+
+    <div id="historyList" class="history-list">
+
+        <div class="empty-state">
+
+            <h3>No training history yet</h3>
+
+            <p>
+                Complete your first workout and it
+                will appear here.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+        <!-- =========================
+             TRAINING PHILOSOPHY
+        ========================== -->
+
+        <section class="philosophy-section">
+
+            <p class="eyebrow">
+                SYSTEM PRINCIPLE
+            </p>
+
+            <h2>
+                Minimum effective training.
+                Maximum useful stimulus.
+            </h2>
+
+            <p>
+                The goal isn't to perform as many exercises as possible.
+                The goal is to select the smallest amount of training
+                that produces meaningful adaptation while leaving enough
+                recovery capacity for long-term progression.
+            </p>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script src="data/exercises.js"></script>
+<script src="data/storage.js"></script>
+<script src="app.js"></script>
+
+</body>
+
+</html>

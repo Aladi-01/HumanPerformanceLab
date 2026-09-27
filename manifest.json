@@ -1,0 +1,10 @@
+{
+  "name": "Human Performance Lab",
+  "short_name": "HPL",
+  "description": "Personal Human Performance and Training System",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b0f14",
+  "theme_color": "#0b0f14",
+  "orientation": "portrait"
+}
