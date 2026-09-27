@@ -1,77 +1,109 @@
-// ==========================================
-// HUMAN PERFORMANCE LAB
-// MAIN APPLICATION LOGIC
-// ==========================================
+/* =========================================================
+   HUMAN PERFORMANCE LAB
+   MAIN APPLICATION ENGINE
+========================================================= */
 
 
-// ==========================================
-// WEEKLY STRUCTURE
-// ==========================================
+/* =========================================================
+   WEEKLY STRUCTURE
+========================================================= */
 
 const weeklyStructure = {
 
     Monday: {
         category: "Push",
-        description: "Upper-body pushing strength and control."
+        description:
+            "Upper-body pushing strength and control."
     },
 
     Tuesday: {
         category: "Pull",
-        description: "Back, pulling strength, grip and control."
+        description:
+            "Back, pulling strength, grip and control."
     },
 
     Wednesday: {
         category: "Legs + Core",
-        description: "Lower-body strength, stability and core control."
+        description:
+            "Lower-body strength, stability and core control."
     },
 
     Thursday: {
         category: "Flexibility + Mobility",
-        description: "Improve movement quality, mobility and flexibility."
+        description:
+            "Movement quality, mobility and flexibility."
     },
 
     Friday: {
         category: "Stability",
-        description: "Balance, coordination and joint control."
+        description:
+            "Balance, coordination and joint control."
     },
 
     Saturday: {
         category: "Endurance",
-        description: "Build cardiovascular endurance and work capacity."
+        description:
+            "Cardiovascular endurance and work capacity."
     },
 
     Sunday: {
         category: "Recovery",
-        description: "Low-intensity movement and recovery."
+        description:
+            "Low-intensity movement and recovery."
     }
 
 };
 
 
-// ==========================================
-// DOM ELEMENTS
-// ==========================================
+/* =========================================================
+   STATE
+========================================================= */
 
-const dayCards =
-    document.querySelectorAll(".day-card");
+let currentDay = getTodayName();
 
-const todayCategory =
-    document.getElementById("todayCategory");
+let currentSession = [];
 
-const todayDescription =
-    document.getElementById("todayDescription");
+let completedSessions = getStoredSessions();
 
-const todayDay =
-    document.getElementById("todayDay");
+let activeWorkout = null;
 
-const sessionTitle =
-    document.getElementById("sessionTitle");
+let workoutTimer = null;
 
-const exerciseList =
-    document.getElementById("exerciseList");
+let workoutStartTime = null;
 
-const startWorkoutBtn =
-    document.getElementById("startWorkoutBtn");
+let currentExerciseIndex = 0;
+
+let deferredInstallPrompt = null;
+
+let selectedExerciseForModal = null;
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const screens = document.querySelectorAll(".screen");
+
+const navItems =
+    document.querySelectorAll(".nav-item");
+
+const weekGrid =
+    document.getElementById("weekGrid");
+
+const exerciseGrid =
+    document.getElementById("exerciseGrid");
+
+const selectedSession =
+    document.getElementById("selectedSession");
+
+const exerciseScreenTitle =
+    document.getElementById("exerciseScreenTitle");
+
+const selectedSessionTitle =
+    document.getElementById("selectedSessionTitle");
+
+const selectedCount =
+    document.getElementById("selectedCount");
 
 const trainingDays =
     document.getElementById("trainingDays");
@@ -82,74 +114,434 @@ const exerciseCount =
 const sessionCount =
     document.getElementById("sessionCount");
 
+const todayTitle =
+    document.getElementById("todayTitle");
+
+const todayDay =
+    document.getElementById("todayDay");
+
+const todayFocus =
+    document.getElementById("todayFocus");
+
+const todayDescription =
+    document.getElementById("todayDescription");
+
+const tomorrowDay =
+    document.getElementById("tomorrowDay");
+
+const tomorrowFocus =
+    document.getElementById("tomorrowFocus");
+
+const tomorrowDescription =
+    document.getElementById("tomorrowDescription");
+
+const todayStartButton =
+    document.getElementById("todayStartButton");
+
+const todayOpenButton =
+    document.getElementById("todayOpenButton");
+
+const saveSessionButton =
+    document.getElementById("saveSessionButton");
+
+const startWorkoutButton =
+    document.getElementById("startWorkoutButton");
+
 const historyList =
     document.getElementById("historyList");
 
+const exerciseModal =
+    document.getElementById("exerciseModal");
 
-// ==========================================
-// EXERCISE DETAIL DOM ELEMENTS
-// ==========================================
+const modalClose =
+    document.getElementById("modalClose");
 
-const exerciseDetailSection =
-    document.getElementById("exerciseDetailSection");
+const modalExerciseTitle =
+    document.getElementById("modalExerciseTitle");
 
-const detailExerciseName =
-    document.getElementById("detailExerciseName");
+const modalExerciseCategory =
+    document.getElementById("modalExerciseCategory");
 
-const detailMovement =
-    document.getElementById("detailMovement");
+const modalExerciseBody =
+    document.getElementById("modalExerciseBody");
 
-const detailDifficulty =
-    document.getElementById("detailDifficulty");
+const modalAddExercise =
+    document.getElementById("modalAddExercise");
 
-const detailSkill =
-    document.getElementById("detailSkill");
+const workoutScreen =
+    document.getElementById("workoutScreen");
 
-const detailEquipment =
-    document.getElementById("detailEquipment");
+const activeWorkoutTitle =
+    document.getElementById("activeWorkoutTitle");
 
-const detailMuscles =
-    document.getElementById("detailMuscles");
+const workoutTimerElement =
+    document.getElementById("workoutTimer");
 
-const detailPrescription =
-    document.getElementById("detailPrescription");
+const activeWorkoutContent =
+    document.getElementById("activeWorkoutContent");
 
-const detailProgression =
-    document.getElementById("detailProgression");
+const workoutProgressText =
+    document.getElementById("workoutProgressText");
 
-const detailRegression =
-    document.getElementById("detailRegression");
+const workoutProgressBar =
+    document.getElementById("workoutProgressBar");
 
-const detailNotes =
-    document.getElementById("detailNotes");
+const completeSetButton =
+    document.getElementById("completeSetButton");
 
-const closeExerciseDetailBtn =
-    document.getElementById("closeExerciseDetailBtn");
+const nextExerciseButton =
+    document.getElementById("nextExerciseButton");
+
+const finishWorkoutButton =
+    document.getElementById("finishWorkoutButton");
+
+const exitWorkoutButton =
+    document.getElementById("exitWorkoutButton");
+
+const installButton =
+    document.getElementById("installButton");
+
+const profileInstallButton =
+    document.getElementById("profileInstallButton");
+
+const installStatus =
+    document.getElementById("installStatus");
+
+const profileGoalText =
+    document.getElementById("profileGoalText");
+
+const goalOptions =
+    document.querySelectorAll(".goal-option");
 
 
-// ==========================================
-// APP STATE
-// ==========================================
+/* =========================================================
+   HELPERS
+========================================================= */
 
-let currentDay = "Monday";
+function getTodayName() {
 
-let currentSession = [];
+    const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    ];
 
-let completedSessions =
-    getStoredSessions();
-
-let activeWorkout = null;
-
-let workoutTimer = null;
-
-let workoutStartTime = null;
+    return days[new Date().getDay()];
+}
 
 
-// ==========================================
-// GET EXERCISES FOR CATEGORY
-// ==========================================
+function getTomorrowName() {
 
-function getExercisesForCategory(category) {
+    const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    ];
+
+    return days[
+        (new Date().getDay() + 1) % 7
+    ];
+}
+
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* =========================================================
+   SCREEN NAVIGATION
+========================================================= */
+
+function openScreen(screenId) {
+
+    screens.forEach(screen => {
+
+        screen.classList.remove(
+            "active-screen"
+        );
+
+    });
+
+
+    const target =
+        document.getElementById(screenId);
+
+    if (target) {
+
+        target.classList.add(
+            "active-screen"
+        );
+
+    }
+
+
+    navItems.forEach(item => {
+
+        item.classList.toggle(
+            "active",
+            item.dataset.screen === screenId
+        );
+
+    });
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+
+    if (screenId === "historyScreen") {
+
+        renderHistory();
+
+    }
+
+
+    if (screenId === "profileScreen") {
+
+        loadProfile();
+
+    }
+
+}
+
+
+/* =========================================================
+   NAV EVENTS
+========================================================= */
+
+navItems.forEach(item => {
+
+    item.addEventListener(
+        "click",
+        () => {
+
+            openScreen(
+                item.dataset.screen
+            );
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   TODAY
+========================================================= */
+
+function initializeToday() {
+
+    currentDay = getTodayName();
+
+    updateTodayUI();
+
+    updateTomorrowUI();
+
+    renderWeek();
+
+    selectDay(
+        currentDay,
+        false
+    );
+
+}
+
+
+function updateTodayUI() {
+
+    const structure =
+        weeklyStructure[currentDay];
+
+    if (!structure) return;
+
+    if (todayDay) {
+
+        todayDay.textContent =
+            currentDay.slice(0, 3);
+
+    }
+
+    if (todayTitle) {
+
+        todayTitle.textContent =
+            `${currentDay} Training`;
+
+    }
+
+    if (todayFocus) {
+
+        todayFocus.textContent =
+            structure.category;
+
+    }
+
+    if (todayDescription) {
+
+        todayDescription.textContent =
+            structure.description;
+
+    }
+
+}
+
+
+function updateTomorrowUI() {
+
+    const tomorrow =
+        getTomorrowName();
+
+    const structure =
+        weeklyStructure[tomorrow];
+
+    if (!structure) return;
+
+    if (tomorrowDay) {
+
+        tomorrowDay.textContent =
+            tomorrow.slice(0, 3);
+
+    }
+
+    if (tomorrowFocus) {
+
+        tomorrowFocus.textContent =
+            structure.category;
+
+    }
+
+    if (tomorrowDescription) {
+
+        tomorrowDescription.textContent =
+            structure.description;
+
+    }
+
+}
+
+
+/* =========================================================
+   WEEK
+========================================================= */
+
+function renderWeek() {
+
+    if (!weekGrid) return;
+
+    weekGrid.innerHTML = "";
+
+    Object.entries(
+        weeklyStructure
+    ).forEach(([day, structure]) => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "day-card";
+
+        if (day === currentDay) {
+
+            button.classList.add(
+                "active"
+            );
+
+        }
+
+        button.dataset.day = day;
+
+        button.innerHTML = `
+
+            <span class="day-name">
+                ${escapeHTML(day.slice(0, 3))}
+            </span>
+
+            <strong>
+                ${escapeHTML(structure.category)}
+            </strong>
+
+            <span>
+                ${escapeHTML(structure.description)}
+            </span>
+
+        `;
+
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                selectDay(day);
+
+                openScreen(
+                    "exercisesScreen"
+                );
+
+            }
+        );
+
+
+        weekGrid.appendChild(button);
+
+    });
+
+}
+
+
+/* =========================================================
+   SELECT DAY
+========================================================= */
+
+function selectDay(
+    day,
+    clearSession = true
+) {
+
+    if (!weeklyStructure[day]) {
+        return;
+    }
+
+
+    currentDay = day;
+
+
+    if (clearSession) {
+
+        currentSession = [];
+
+    }
+
+
+    renderWeek();
+
+    renderExercises();
+
+    updateExerciseScreen();
+
+}
+
+
+/* =========================================================
+   EXERCISES
+========================================================= */
+
+function getExercisesForCurrentDay() {
 
     if (!window.exerciseDatabase) {
 
@@ -161,616 +553,413 @@ function getExercisesForCategory(category) {
 
     }
 
+
     return window.exerciseDatabase.filter(
         exercise =>
-            exercise.category === category
+            exercise.category ===
+            weeklyStructure[currentDay].category
     );
 
 }
 
 
-// ==========================================
-// SHOW EXERCISE DETAILS
-// ==========================================
+function updateExerciseScreen() {
 
-function showExerciseDetails(exercise) {
+    const structure =
+        weeklyStructure[currentDay];
 
-    if (!exercise || !exerciseDetailSection) {
-        return;
-    }
+    if (!structure) return;
 
-    if (detailExerciseName) {
-        detailExerciseName.textContent =
-            exercise.name || "Unknown Exercise";
-    }
 
-    if (detailMovement) {
-        detailMovement.textContent =
-            exercise.movement || "—";
-    }
+    if (exerciseScreenTitle) {
 
-    if (detailDifficulty) {
-        detailDifficulty.textContent =
-            exercise.difficulty || "—";
-    }
-
-    if (detailSkill) {
-        detailSkill.textContent =
-            exercise.skill || "—";
-    }
-
-    if (detailEquipment) {
-        detailEquipment.textContent =
-            exercise.equipment || "None";
-    }
-
-    if (detailMuscles) {
-
-        detailMuscles.textContent =
-            Array.isArray(exercise.muscles)
-                ? exercise.muscles.join(", ")
-                : exercise.muscles || "—";
+        exerciseScreenTitle.textContent =
+            `${currentDay} — ${structure.category}`;
 
     }
 
-    if (detailPrescription) {
+    if (selectedSessionTitle) {
 
-        detailPrescription.textContent =
-            `${exercise.defaultSets || "—"} sets × ` +
-            `${exercise.defaultReps || "—"} | ` +
-            `Rest: ${exercise.rest || "—"}`;
+        selectedSessionTitle.textContent =
+            `${currentDay} Session`;
 
     }
-
-    if (detailProgression) {
-
-        detailProgression.textContent =
-            exercise.progression ||
-            "No progression defined yet.";
-
-    }
-
-    if (detailRegression) {
-
-        detailRegression.textContent =
-            exercise.regression ||
-            "No regression defined yet.";
-
-    }
-
-    if (detailNotes) {
-
-        detailNotes.textContent =
-            exercise.notes ||
-            "No additional notes.";
-
-    }
-
-    exerciseDetailSection.classList.add("visible");
-
-    exerciseDetailSection.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
 
 }
 
 
-// ==========================================
-// CLOSE EXERCISE DETAILS
-// ==========================================
+/* =========================================================
+   RENDER EXERCISES
+========================================================= */
 
-if (closeExerciseDetailBtn) {
+function renderExercises() {
 
-    closeExerciseDetailBtn.addEventListener(
-        "click",
-        () => {
-
-            exerciseDetailSection.classList.remove(
-                "visible"
-            );
-
-        }
-    );
-
-}
+    updateExerciseScreen();
 
 
-// ==========================================
-// RENDER EXERCISES
-// ==========================================
+    if (!exerciseGrid) return;
 
-function renderExercises(category) {
 
     const exercises =
-        getExercisesForCategory(category);
+        getExercisesForCurrentDay();
 
-    let html = `
-
-        <div class="exercise-section">
-
-            <div class="section-heading">
-
-                <h3>
-                    Available Exercises
-                </h3>
-
-                <p>
-                    Select exercises to build today's session.
-                </p>
-
-            </div>
-
-            <div class="available-exercises">
-
-    `;
-
-
-    // --------------------------------------
-    // NO EXERCISES
-    // --------------------------------------
 
     if (exercises.length === 0) {
 
-        html += `
+        exerciseGrid.innerHTML = `
 
             <div class="empty-state">
 
-                <h3>
+                <strong>
                     No exercises found
-                </h3>
+                </strong>
 
-                <p>
-                    There are currently no exercises
-                    in the ${category} category.
-                </p>
+                <span>
+                    Add exercises to the database
+                    for this category.
+                </span>
 
             </div>
 
         `;
 
+        return;
+
     }
 
 
-    // --------------------------------------
-    // EXERCISE CARDS
-    // --------------------------------------
+    exerciseGrid.innerHTML =
+        exercises.map(exercise => {
 
-    else {
-
-        exercises.forEach(exercise => {
-
-            const alreadyAdded =
+            const added =
                 currentSession.some(
                     item =>
                         item.id === exercise.id
                 );
 
 
-            html += `
+            return `
 
-                <div
+                <article
                     class="exercise-card"
-                    data-exercise-id="${exercise.id}"
                 >
 
-                    <div class="exercise-info">
-
-                        <h3>
-                            ${exercise.name}
-                        </h3>
-
-                        <p class="exercise-meta">
-                            ${exercise.movement}
-                        </p>
-
-                        <p>
-                            <strong>Muscles:</strong>
-                            ${
-                                Array.isArray(exercise.muscles)
-                                    ? exercise.muscles.join(", ")
-                                    : exercise.muscles || "—"
-                            }
-                        </p>
-
-                        <p>
-                            <strong>Difficulty:</strong>
-                            ${exercise.difficulty}
-                        </p>
-
-                        <p>
-                            <strong>Equipment:</strong>
-                            ${exercise.equipment}
-                        </p>
-
-                        <p>
-                            <strong>Default:</strong>
-                            ${exercise.defaultSets}
-                            sets ×
-                            ${exercise.defaultReps}
-                        </p>
-
-                        <small class="click-hint">
-                            CLICK CARD FOR EXERCISE INTELLIGENCE
-                        </small>
-
-                    </div>
-
-                    <button
-                        class="primary-button add-exercise-btn"
-                        data-id="${exercise.id}"
-                        ${alreadyAdded ? "disabled" : ""}
-                    >
-                        ${
-                            alreadyAdded
-                                ? "ADDED ✓"
-                                : "ADD"
-                        }
-                    </button>
-
-                </div>
-
-            `;
-
-        });
-
-    }
-
-
-    html += `
-
-            </div>
-
-        </div>
-
-
-        <div class="session-builder">
-
-            <div class="section-heading">
-
-                <h3>
-                    Today's Session
-                </h3>
-
-                <p>
-                    ${
-                        currentSession.length === 0
-                            ? "No exercises selected yet."
-                            : `${currentSession.length} exercise(s) selected.`
-                    }
-                </p>
-
-            </div>
-
-    `;
-
-
-    // --------------------------------------
-    // EMPTY SESSION
-    // --------------------------------------
-
-    if (currentSession.length === 0) {
-
-        html += `
-
-            <div class="empty-state">
-
-                <h3>
-                    Your workout is empty
-                </h3>
-
-                <p>
-                    Add exercises above to build your session.
-                </p>
-
-            </div>
-
-        `;
-
-    }
-
-
-    // --------------------------------------
-    // SELECTED SESSION
-    // --------------------------------------
-
-    else {
-
-        html += `
-
-            <div class="selected-exercises">
-
-        `;
-
-
-        currentSession.forEach(
-            (exercise, index) => {
-
-                html += `
-
-                    <div class="selected-exercise">
+                    <div class="exercise-top">
 
                         <div>
 
                             <h3>
-                                ${index + 1}.
-                                ${exercise.name}
+                                ${escapeHTML(exercise.name)}
                             </h3>
 
-                            <p>
-                                ${exercise.defaultSets}
-                                sets ×
-                                ${exercise.defaultReps}
-
-                                • Rest:
-                                ${exercise.rest}
-                            </p>
+                            <span
+                                class="exercise-movement"
+                            >
+                                ${escapeHTML(exercise.movement)}
+                            </span>
 
                         </div>
 
+                    </div>
+
+
+                    <p class="exercise-meta">
+
+                        ${escapeHTML(
+                            exercise.notes ||
+                            "Controlled movement with good technique."
+                        )}
+
+                    </p>
+
+
+                    <div
+                        class="exercise-tags"
+                    >
+
+                        <span
+                            class="exercise-tag"
+                        >
+                            ${escapeHTML(
+                                exercise.difficulty
+                            )}
+                        </span>
+
+                        <span
+                            class="exercise-tag"
+                        >
+                            ${escapeHTML(
+                                exercise.equipment
+                            )}
+                        </span>
+
+                        <span
+                            class="exercise-tag"
+                        >
+                            ${escapeHTML(
+                                exercise.defaultSets
+                            )} sets
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="exercise-actions"
+                    >
+
                         <button
-                            class="remove-exercise-btn"
+                            class="small-button view-exercise-button"
                             data-id="${exercise.id}"
                         >
-                            REMOVE
+                            VIEW
+                        </button>
+
+                        <button
+                            class="small-button add-exercise-button"
+                            data-id="${exercise.id}"
+                            ${added ? "disabled" : ""}
+                        >
+                            ${
+                                added
+                                    ? "ADDED ✓"
+                                    : "ADD"
+                            }
                         </button>
 
                     </div>
 
-                `;
+                </article>
 
-            }
-        );
+            `;
 
-
-        html += `
-
-            </div>
-
-            <button
-                id="saveSessionBtn"
-                class="primary-button save-session-btn"
-            >
-                SAVE SESSION PLAN
-            </button>
-
-        `;
-
-    }
+        }).join("");
 
 
-    html += `
+    attachExerciseEvents();
 
-        </div>
-
-    `;
-
-
-    exerciseList.innerHTML = html;
-
-
-    attachExerciseButtons();
-
-    attachRemoveButtons();
-
-    attachSaveButton();
-
-    attachExerciseDetailButtons();
+    renderSelectedSession();
 
 }
 
 
-// ==========================================
-// EXERCISE DETAIL BUTTON EVENTS
-// ==========================================
+/* =========================================================
+   EXERCISE EVENTS
+========================================================= */
 
-function attachExerciseDetailButtons() {
+function attachExerciseEvents() {
 
-    const cards =
-        document.querySelectorAll(
-            ".exercise-card"
-        );
+    document
+        .querySelectorAll(
+            ".view-exercise-button"
+        )
+        .forEach(button => {
 
+            button.addEventListener(
+                "click",
+                () => {
 
-    cards.forEach(card => {
-
-        card.addEventListener(
-            "click",
-            event => {
-
-                // Don't open details when clicking ADD.
-                if (
-                    event.target.closest(
-                        ".add-exercise-btn"
-                    )
-                ) {
-                    return;
-                }
-
-
-                const id =
-                    card.dataset.exerciseId;
-
-
-                const exercise =
-                    window.exerciseDatabase.find(
-                        item =>
-                            String(item.id) ===
-                            String(id)
-                    );
-
-
-                if (exercise) {
-
-                    showExerciseDetails(
-                        exercise
+                    openExerciseModal(
+                        button.dataset.id
                     );
 
                 }
+            );
 
-            }
-        );
+        });
 
-    });
+
+    document
+        .querySelectorAll(
+            ".add-exercise-button"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    addExercise(
+                        button.dataset.id
+                    );
+
+                }
+            );
+
+        });
 
 }
 
 
-// ==========================================
-// ADD EXERCISE
-// ==========================================
+/* =========================================================
+   ADD EXERCISE
+========================================================= */
 
-function addExerciseToSession(id) {
+function addExercise(id) {
 
     const exercise =
         window.exerciseDatabase.find(
-            item =>
-                String(item.id) ===
-                String(id)
+            item => item.id === id
         );
 
 
-    if (!exercise) {
-        return;
-    }
+    if (!exercise) return;
 
 
-    const alreadyExists =
+    const exists =
         currentSession.some(
-            item =>
-                String(item.id) ===
-                String(id)
+            item => item.id === id
         );
 
 
-    if (alreadyExists) {
-        return;
-    }
+    if (exists) return;
 
 
-    currentSession.push(exercise);
-
-
-    renderExercises(
-        weeklyStructure[currentDay].category
+    currentSession.push(
+        exercise
     );
+
+
+    renderExercises();
 
 }
 
 
-// ==========================================
-// REMOVE EXERCISE
-// ==========================================
+/* =========================================================
+   REMOVE EXERCISE
+========================================================= */
 
-function removeExerciseFromSession(id) {
+function removeExercise(id) {
 
     currentSession =
         currentSession.filter(
             exercise =>
-                String(exercise.id) !==
-                String(id)
+                exercise.id !== id
         );
 
 
-    renderExercises(
-        weeklyStructure[currentDay].category
-    );
+    renderExercises();
 
 }
 
 
-// ==========================================
-// ADD BUTTON EVENTS
-// ==========================================
+/* =========================================================
+   SELECTED SESSION
+========================================================= */
 
-function attachExerciseButtons() {
+function renderSelectedSession() {
 
-    const buttons =
-        document.querySelectorAll(
-            ".add-exercise-btn"
-        );
+    if (!selectedSession) return;
 
 
-    buttons.forEach(button => {
+    if (selectedCount) {
 
-        button.addEventListener(
-            "click",
-            event => {
+        selectedCount.textContent =
+            currentSession.length;
 
-                event.stopPropagation();
-
-                const id =
-                    button.dataset.id;
-
-                addExerciseToSession(id);
-
-            }
-        );
-
-    });
-
-}
-
-
-// ==========================================
-// REMOVE BUTTON EVENTS
-// ==========================================
-
-function attachRemoveButtons() {
-
-    const buttons =
-        document.querySelectorAll(
-            ".remove-exercise-btn"
-        );
-
-
-    buttons.forEach(button => {
-
-        button.addEventListener(
-            "click",
-            event => {
-
-                event.stopPropagation();
-
-                const id =
-                    button.dataset.id;
-
-                removeExerciseFromSession(id);
-
-            }
-        );
-
-    });
-
-}
-
-
-// ==========================================
-// SAVE SESSION PLAN
-// ==========================================
-
-function attachSaveButton() {
-
-    const saveButton =
-        document.getElementById(
-            "saveSessionBtn"
-        );
-
-
-    if (!saveButton) {
-        return;
     }
 
 
-    saveButton.addEventListener(
-        "click",
-        saveSessionPlan
-    );
+    if (
+        currentSession.length === 0
+    ) {
+
+        selectedSession.innerHTML = `
+
+            <div class="empty-state">
+
+                <strong>
+                    No exercises selected
+                </strong>
+
+                <span>
+                    Add exercises above to
+                    build your workout.
+                </span>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    selectedSession.innerHTML =
+        currentSession.map(
+            (exercise, index) => `
+
+                <div
+                    class="selected-item"
+                >
+
+                    <div>
+
+                        <strong>
+                            ${index + 1}.
+                            ${escapeHTML(
+                                exercise.name
+                            )}
+                        </strong>
+
+                        <span>
+                            ${escapeHTML(
+                                exercise.defaultSets
+                            )}
+                            sets ×
+                            ${escapeHTML(
+                                exercise.defaultReps
+                            )}
+                            • Rest:
+                            ${escapeHTML(
+                                exercise.rest
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="remove-button"
+                        data-remove-id="${exercise.id}"
+                    >
+                        REMOVE
+                    </button>
+
+                </div>
+
+            `
+        ).join("");
+
+
+    document
+        .querySelectorAll(
+            "[data-remove-id]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    removeExercise(
+                        button.dataset.removeId
+                    );
+
+                }
+            );
+
+        });
 
 }
 
 
-function saveSessionPlan() {
+/* =========================================================
+   SAVE SESSION PLAN
+========================================================= */
+
+function saveCurrentSessionPlan() {
 
     if (currentSession.length === 0) {
 
@@ -783,37 +972,315 @@ function saveSessionPlan() {
     }
 
 
+    const planKey =
+        "hpl_current_plan";
+
+
+    const plan = {
+
+        day: currentDay,
+
+        category:
+            weeklyStructure[
+                currentDay
+            ].category,
+
+        exercises:
+            currentSession.map(
+                exercise => exercise.id
+            ),
+
+        savedAt:
+            new Date().toISOString()
+
+    };
+
+
+    localStorage.setItem(
+        planKey,
+        JSON.stringify(plan)
+    );
+
+
     alert(
-        `Session plan ready ✓\n\n` +
-        `${currentDay} — ` +
-        `${weeklyStructure[currentDay].category}\n\n` +
-        `${currentSession.length} exercises selected.\n\n` +
-        `Press START SESSION to begin.`
+        `${currentDay} session saved ✓`
     );
 
 }
 
 
-// ==========================================
-// START WORKOUT
-// ==========================================
+/* =========================================================
+   LOAD SAVED SESSION
+========================================================= */
 
-if (startWorkoutBtn) {
+function loadSavedSession() {
 
-    startWorkoutBtn.addEventListener(
+    try {
+
+        const raw =
+            localStorage.getItem(
+                "hpl_current_plan"
+            );
+
+
+        if (!raw) return;
+
+
+        const plan =
+            JSON.parse(raw);
+
+
+        if (
+            plan.day !== currentDay
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !Array.isArray(
+                plan.exercises
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        currentSession =
+            plan.exercises
+                .map(id =>
+                    window.exerciseDatabase.find(
+                        exercise =>
+                            exercise.id === id
+                    )
+                )
+                .filter(Boolean);
+
+
+    } catch (error) {
+
+        console.error(
+            "Could not load saved plan:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   EXERCISE MODAL
+========================================================= */
+
+function openExerciseModal(id) {
+
+    const exercise =
+        window.exerciseDatabase.find(
+            item => item.id === id
+        );
+
+
+    if (!exercise) return;
+
+
+    selectedExerciseForModal =
+        exercise;
+
+
+    modalExerciseTitle.textContent =
+        exercise.name;
+
+    modalExerciseCategory.textContent =
+        exercise.category;
+
+
+    modalExerciseBody.innerHTML = `
+
+        <p>
+            ${escapeHTML(
+                exercise.notes ||
+                "Use controlled technique and stop if something hurts."
+            )}
+        </p>
+
+
+        <div class="modal-row">
+
+            <div class="modal-stat">
+
+                <span>MOVEMENT</span>
+
+                <strong>
+                    ${escapeHTML(
+                        exercise.movement
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="modal-stat">
+
+                <span>DIFFICULTY</span>
+
+                <strong>
+                    ${escapeHTML(
+                        exercise.difficulty
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="modal-stat">
+
+                <span>SETS</span>
+
+                <strong>
+                    ${escapeHTML(
+                        exercise.defaultSets
+                    )}
+                </strong>
+
+            </div>
+
+
+            <div class="modal-stat">
+
+                <span>REPS / TIME</span>
+
+                <strong>
+                    ${escapeHTML(
+                        exercise.defaultReps
+                    )}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <p>
+            <strong>Muscles:</strong>
+            ${escapeHTML(
+                exercise.muscles.join(", ")
+            )}
+        </p>
+
+
+        <p>
+            <strong>Equipment:</strong>
+            ${escapeHTML(
+                exercise.equipment
+            )}
+        </p>
+
+
+        <p>
+            <strong>Progression:</strong>
+            ${escapeHTML(
+                exercise.progression
+            )}
+        </p>
+
+
+        <p>
+            <strong>Regression:</strong>
+            ${escapeHTML(
+                exercise.regression
+            )}
+        </p>
+
+    `;
+
+
+    const alreadyAdded =
+        currentSession.some(
+            item =>
+                item.id === exercise.id
+        );
+
+
+    modalAddExercise.textContent =
+        alreadyAdded
+            ? "ALREADY IN SESSION"
+            : "ADD TO SESSION";
+
+
+    modalAddExercise.disabled =
+        alreadyAdded;
+
+
+    exerciseModal.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function closeExerciseModal() {
+
+    exerciseModal.classList.add(
+        "hidden"
+    );
+
+    selectedExerciseForModal =
+        null;
+
+}
+
+
+modalClose.addEventListener(
+    "click",
+    closeExerciseModal
+);
+
+
+document
+    .querySelector(".modal-backdrop")
+    .addEventListener(
         "click",
-        startWorkout
-    );
+        closeExerciseModal
+);
 
-}
 
+modalAddExercise.addEventListener(
+    "click",
+    () => {
+
+        if (
+            selectedExerciseForModal
+        ) {
+
+            addExercise(
+                selectedExerciseForModal.id
+            );
+
+            closeExerciseModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   WORKOUT
+========================================================= */
 
 function startWorkout() {
 
-    if (currentSession.length === 0) {
+    if (
+        currentSession.length === 0
+    ) {
 
         alert(
-            "First add some exercises to your session."
+            "Add exercises to your session first."
         );
 
         return;
@@ -821,17 +1288,16 @@ function startWorkout() {
     }
 
 
-    if (activeWorkout) {
-        return;
-    }
-
-
     activeWorkout = {
+
+        id: Date.now(),
 
         day: currentDay,
 
         category:
-            weeklyStructure[currentDay].category,
+            weeklyStructure[
+                currentDay
+            ].category,
 
         startTime:
             Date.now(),
@@ -850,6 +1316,8 @@ function startWorkout() {
     };
 
 
+    currentExerciseIndex = 0;
+
     workoutStartTime =
         activeWorkout.startTime;
 
@@ -858,12 +1326,21 @@ function startWorkout() {
 
     renderActiveWorkout();
 
+
+    workoutScreen.classList.remove(
+        "hidden"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
 }
 
 
-// ==========================================
-// WORKOUT TIMER
-// ==========================================
+/* =========================================================
+   WORKOUT TIMER
+========================================================= */
 
 function startWorkoutTimer() {
 
@@ -899,8 +1376,12 @@ function stopWorkoutTimer() {
 
 function updateWorkoutTimer() {
 
-    if (!workoutStartTime) {
+    if (
+        !workoutStartTime
+    ) {
+
         return;
+
     }
 
 
@@ -923,7 +1404,8 @@ function updateWorkoutTimer() {
 
     const minutes =
         Math.floor(
-            (totalSeconds % 3600) / 60
+            (totalSeconds % 3600) /
+            60
         );
 
 
@@ -931,31 +1413,21 @@ function updateWorkoutTimer() {
         totalSeconds % 60;
 
 
-    const timer =
-        document.getElementById(
-            "workoutTimer"
-        );
+    if (workoutTimerElement) {
 
+        workoutTimerElement.textContent =
+            `${String(hours).padStart(2, "0")}:` +
+            `${String(minutes).padStart(2, "0")}:` +
+            `${String(seconds).padStart(2, "0")}`;
 
-    if (!timer) {
-        return;
     }
-
-
-    timer.textContent =
-
-        `${String(hours).padStart(2, "0")}:` +
-
-        `${String(minutes).padStart(2, "0")}:` +
-
-        `${String(seconds).padStart(2, "0")}`;
 
 }
 
 
-// ==========================================
-// RENDER ACTIVE WORKOUT
-// ==========================================
+/* =========================================================
+   ACTIVE WORKOUT RENDER
+========================================================= */
 
 function renderActiveWorkout() {
 
@@ -964,260 +1436,328 @@ function renderActiveWorkout() {
     }
 
 
-    sessionTitle.textContent =
-        `${activeWorkout.day} — ACTIVE WORKOUT`;
+    const exercises =
+        activeWorkout.exercises;
 
 
-    let html = `
-
-        <div class="active-workout">
-
-            <div class="workout-timer-card">
-
-                <span>
-                    SESSION TIME
-                </span>
-
-                <strong id="workoutTimer">
-                    00:00:00
-                </strong>
-
-                <small>
-                    Active workout duration
-                </small>
-
-            </div>
+    const current =
+        exercises[
+            currentExerciseIndex
+        ];
 
 
-            <div class="workout-status">
-
-                <h3>
-                    🔴 Workout in progress
-                </h3>
-
-                <p>
-                    ${activeWorkout.category}
-                </p>
-
-            </div>
-
-    `;
+    if (!current) return;
 
 
-    activeWorkout.exercises.forEach(
-        (exercise, exerciseIndex) => {
-
-            const totalSets =
-                Number(
-                    exercise.defaultSets
-                ) || 1;
+    activeWorkoutTitle.textContent =
+        `${activeWorkout.day} — ${activeWorkout.category}`;
 
 
-            html += `
-
-                <div class="active-exercise">
-
-                    <h2>
-                        ${exerciseIndex + 1}.
-                        ${exercise.name}
-                    </h2>
-
-                    <p>
-                        ${exercise.defaultReps}
-                        • Rest:
-                        ${exercise.rest}
-                    </p>
-
-                    <div class="set-list">
-
-            `;
+    const totalSets =
+        Number(
+            current.defaultSets
+        ) || 1;
 
 
-            for (
-                let set = 1;
-                set <= totalSets;
-                set++
-            ) {
+    const completedSets =
+        current.completedSets;
+
+
+    activeWorkoutContent.innerHTML = `
+
+        ${exercises.map(
+            (exercise, index) => {
+
+                const sets =
+                    Number(
+                        exercise.defaultSets
+                    ) || 1;
 
                 const completed =
-                    set <=
                     exercise.completedSets;
 
+                const isCurrent =
+                    index ===
+                    currentExerciseIndex;
 
-                html += `
 
-                    <button
-                        class="set-button ${
-                            completed
-                                ? "set-completed"
-                                : ""
-                        }"
+                return `
 
-                        data-exercise="${exerciseIndex}"
-
-                        data-set="${set}"
-
-                        ${
-                            completed
-                                ? "disabled"
-                                : ""
-                        }
+                    <article
+                        class="
+                            active-exercise-card
+                            ${isCurrent ? "current" : ""}
+                        "
                     >
 
-                        ${
-                            completed
-                                ? `✓ SET ${set}`
-                                : `SET ${set} — COMPLETE`
-                        }
+                        <div
+                            class="active-exercise-number"
+                        >
+                            EXERCISE ${index + 1}
+                        </div>
 
-                    </button>
+
+                        <h2>
+                            ${escapeHTML(
+                                exercise.name
+                            )}
+                        </h2>
+
+
+                        <p>
+                            ${escapeHTML(
+                                exercise.defaultReps
+                            )}
+                            • Rest:
+                            ${escapeHTML(
+                                exercise.rest
+                            )}
+                        </p>
+
+
+                        <div
+                            class="set-indicators"
+                        >
+
+                            ${Array.from(
+                                { length: sets },
+                                (_, setIndex) => {
+
+                                    const setNumber =
+                                        setIndex + 1;
+
+                                    let className =
+                                        "set-indicator";
+
+                                    if (
+                                        setNumber <=
+                                        completed
+                                    ) {
+
+                                        className +=
+                                            " done";
+
+                                    } else if (
+                                        setNumber ===
+                                        completed + 1 &&
+                                        isCurrent
+                                    ) {
+
+                                        className +=
+                                            " current";
+
+                                    }
+
+
+                                    return `
+
+                                        <div
+                                            class="${className}"
+                                        >
+                                            ${
+                                                setNumber <=
+                                                completed
+                                                    ? `✓ SET ${setNumber}`
+                                                    : `SET ${setNumber}`
+                                            }
+                                        </div>
+
+                                    `;
+
+                                }
+                            ).join("")}
+
+                        </div>
+
+                    </article>
 
                 `;
 
             }
-
-
-            html += `
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-    );
-
-
-    html += `
-
-            <button
-                id="finishWorkoutBtn"
-                class="primary-button"
-            >
-                FINISH WORKOUT
-            </button>
-
-        </div>
+        ).join("")}
 
     `;
 
 
-    exerciseList.innerHTML = html;
-
-
-    startWorkoutBtn.textContent =
-        "WORKOUT ACTIVE";
-
-
-    startWorkoutBtn.disabled = true;
-
-
-    attachSetButtons();
-
-
-    const finishButton =
-        document.getElementById(
-            "finishWorkoutBtn"
+    const totalPossibleSets =
+        exercises.reduce(
+            (total, exercise) =>
+                total +
+                (
+                    Number(
+                        exercise.defaultSets
+                    ) || 1
+                ),
+            0
         );
 
 
-    if (finishButton) {
-
-        finishButton.addEventListener(
-            "click",
-            finishWorkout
+    const completedTotal =
+        exercises.reduce(
+            (total, exercise) =>
+                total +
+                exercise.completedSets,
+            0
         );
+
+
+    const percentage =
+        totalPossibleSets === 0
+            ? 0
+            : Math.round(
+                (
+                    completedTotal /
+                    totalPossibleSets
+                ) * 100
+            );
+
+
+    workoutProgressText.textContent =
+        `${percentage}%`;
+
+    workoutProgressBar.style.width =
+        `${percentage}%`;
+
+
+    completeSetButton.disabled =
+        completedSets >= totalSets;
+
+
+    completeSetButton.textContent =
+        completedSets >= totalSets
+            ? "SETS COMPLETE"
+            : `COMPLETE SET ${completedSets + 1}`;
+
+
+    nextExerciseButton.disabled =
+        currentExerciseIndex >=
+        exercises.length - 1;
+
+}
+
+
+/* =========================================================
+   COMPLETE SET
+========================================================= */
+
+function completeCurrentSet() {
+
+    if (!activeWorkout) return;
+
+
+    const exercise =
+        activeWorkout.exercises[
+            currentExerciseIndex
+        ];
+
+
+    if (!exercise) return;
+
+
+    const plannedSets =
+        Number(
+            exercise.defaultSets
+        ) || 1;
+
+
+    if (
+        exercise.completedSets >=
+        plannedSets
+    ) {
+
+        return;
 
     }
 
 
-    updateWorkoutTimer();
+    exercise.completedSets++;
+
+
+    renderActiveWorkout();
 
 }
 
 
-// ==========================================
-// SET BUTTONS
-// ==========================================
+/* =========================================================
+   NEXT EXERCISE
+========================================================= */
 
-function attachSetButtons() {
+function nextExercise() {
 
-    const buttons =
-        document.querySelectorAll(
-            ".set-button"
-        );
+    if (!activeWorkout) return;
 
 
-    buttons.forEach(button => {
+    if (
+        currentExerciseIndex >=
+        activeWorkout.exercises.length - 1
+    ) {
 
-        button.addEventListener(
-            "click",
-            () => {
+        return;
 
-                const exerciseIndex =
-                    Number(
-                        button.dataset.exercise
-                    );
+    }
 
 
-                const setNumber =
-                    Number(
-                        button.dataset.set
-                    );
+    currentExerciseIndex++;
 
 
-                const exercise =
-                    activeWorkout
-                        .exercises[
-                            exerciseIndex
-                        ];
-
-
-                if (
-                    setNumber ===
-                    exercise.completedSets + 1
-                ) {
-
-                    exercise.completedSets++;
-
-                    renderActiveWorkout();
-
-                }
-
-            }
-        );
-
-    });
+    renderActiveWorkout();
 
 }
 
 
-// ==========================================
-// FINISH WORKOUT
-// ==========================================
+/* =========================================================
+   EXIT WORKOUT
+========================================================= */
+
+function exitWorkout() {
+
+    if (!activeWorkout) {
+
+        workoutScreen.classList.add(
+            "hidden"
+        );
+
+        document.body.style.overflow =
+            "";
+
+        return;
+
+    }
+
+
+    const leave =
+        confirm(
+            "Leave this active workout? Your current progress will not be saved."
+        );
+
+
+    if (!leave) return;
+
+
+    stopWorkoutTimer();
+
+
+    activeWorkout = null;
+
+    workoutStartTime = null;
+
+    workoutScreen.classList.add(
+        "hidden"
+    );
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   FINISH WORKOUT
+========================================================= */
 
 function finishWorkout() {
 
-    if (!activeWorkout) {
-        return;
-    }
-
-
-    const endTime =
-        Date.now();
-
-
-    const duration =
-        Math.max(
-            1,
-            Math.round(
-                (
-                    endTime -
-                    activeWorkout.startTime
-                ) / 60000
-            )
-        );
+    if (!activeWorkout) return;
 
 
     const completedExerciseData =
@@ -1240,10 +1780,21 @@ function finishWorkout() {
         );
 
 
+    const duration =
+        Math.max(
+            1,
+            Math.round(
+                (
+                    Date.now() -
+                    activeWorkout.startTime
+                ) / 60000
+            )
+        );
+
+
     const session = {
 
-        id:
-            Date.now(),
+        id: Date.now(),
 
         date:
             new Date().toISOString(),
@@ -1254,9 +1805,7 @@ function finishWorkout() {
         category:
             activeWorkout.category,
 
-        duration:
-
-            duration,
+        duration,
 
         exercises:
             completedExerciseData
@@ -1264,213 +1813,295 @@ function finishWorkout() {
     };
 
 
-    stopWorkoutTimer();
-
-
-    const saved =
-        saveSession(session);
-
-
-    if (!saved) {
-
-        alert(
-            "Could not save the workout."
-        );
-
-        return;
-
-    }
+    saveSession(
+        session
+    );
 
 
     completedSessions =
         getStoredSessions();
 
 
+    stopWorkoutTimer();
+
+
     activeWorkout = null;
 
     workoutStartTime = null;
 
+    currentExerciseIndex = 0;
+
     currentSession = [];
 
 
-    startWorkoutBtn.disabled =
-        false;
+    workoutScreen.classList.add(
+        "hidden"
+    );
 
-    startWorkoutBtn.textContent =
-        "START SESSION";
-
-
-    sessionTitle.textContent =
-        `${currentDay} — ` +
-        `${weeklyStructure[currentDay].category}`;
+    document.body.style.overflow =
+        "";
 
 
     updateStatistics();
 
-    renderTrainingHistory();
+    renderHistory();
 
-
-    renderExercises(
-        weeklyStructure[currentDay]
-            .category
-    );
+    renderExercises();
 
 
     alert(
-
         `WORKOUT COMPLETE ✓\n\n` +
+        `${session.day} — ${session.category}\n\n` +
+        `Exercises: ${session.exercises.length}\n` +
+        `Duration: ${session.duration} min`
+    );
 
-        `${session.day} — ` +
-        `${session.category}\n\n` +
 
-        `Exercises: ` +
-        `${session.exercises.length}\n` +
-
-        `Duration: ` +
-        `${session.duration} min`
-
+    openScreen(
+        "historyScreen"
     );
 
 }
 
 
-// ==========================================
-// DAY SELECTION
-// ==========================================
+/* =========================================================
+   WORKOUT BUTTONS
+========================================================= */
 
-dayCards.forEach(card => {
+startWorkoutButton.addEventListener(
+    "click",
+    startWorkout
+);
 
-    card.addEventListener(
-        "click",
-        () => {
+saveSessionButton.addEventListener(
+    "click",
+    saveCurrentSessionPlan
+);
 
-            const day =
-                card.dataset.day;
+completeSetButton.addEventListener(
+    "click",
+    completeCurrentSet
+);
 
-            selectDay(day);
+nextExerciseButton.addEventListener(
+    "click",
+    nextExercise
+);
 
-        }
-    );
+finishWorkoutButton.addEventListener(
+    "click",
+    finishWorkout
+);
 
-});
+exitWorkoutButton.addEventListener(
+    "click",
+    exitWorkout
+);
 
 
-function selectDay(day) {
+/* =========================================================
+   HISTORY
+========================================================= */
 
-    if (!weeklyStructure[day]) {
+function renderHistory() {
+
+    if (!historyList) return;
+
+
+    const sessions =
+        getStoredSessions()
+            .slice()
+            .reverse();
+
+
+    if (sessions.length === 0) {
+
+        historyList.innerHTML = `
+
+            <div class="empty-state">
+
+                <strong>
+                    No completed sessions yet
+                </strong>
+
+                <span>
+                    Complete your first workout
+                    and it will appear here.
+                </span>
+
+            </div>
+
+        `;
+
         return;
-    }
-
-
-    if (activeWorkout) {
-
-        alert(
-            "Finish the active workout before changing days."
-        );
-
-        return;
 
     }
 
 
-    currentDay = day;
+    historyList.innerHTML =
+        sessions.map(session => {
 
-    currentSession = [];
-
-
-    dayCards.forEach(card => {
-
-        card.classList.remove(
-            "active"
-        );
-
-    });
-
-
-    const selectedCard =
-        document.querySelector(
-            `.day-card[data-day="${day}"]`
-        );
+            const totalSets =
+                (session.exercises || [])
+                    .reduce(
+                        (sum, exercise) =>
+                            sum +
+                            Number(
+                                exercise.completedSets
+                            || 0),
+                        0
+                    );
 
 
-    if (selectedCard) {
-
-        selectedCard.classList.add(
-            "active"
-        );
-
-    }
-
-
-    const structure =
-        weeklyStructure[day];
-
-
-    if (todayCategory) {
-
-        todayCategory.textContent =
-            structure.category;
-
-    }
+            const plannedSets =
+                (session.exercises || [])
+                    .reduce(
+                        (sum, exercise) =>
+                            sum +
+                            Number(
+                                exercise.plannedSets
+                            || 0),
+                        0
+                    );
 
 
-    if (todayDescription) {
-
-        todayDescription.textContent =
-            structure.description;
-
-    }
-
-
-    if (todayDay) {
-
-        todayDay.textContent =
-            day.toUpperCase();
-
-    }
+            const completion =
+                plannedSets === 0
+                    ? 0
+                    : Math.round(
+                        (
+                            totalSets /
+                            plannedSets
+                        ) * 100
+                    );
 
 
-    if (sessionTitle) {
-
-        sessionTitle.textContent =
-            `${day} — ${structure.category}`;
-
-    }
+            const date =
+                new Date(
+                    session.date
+                );
 
 
-    startWorkoutBtn.disabled =
-        false;
+            const readableDate =
+                Number.isNaN(
+                    date.getTime()
+                )
+                    ? "Unknown date"
+                    : date.toLocaleDateString(
+                        undefined,
+                        {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric"
+                        }
+                    );
 
-    startWorkoutBtn.textContent =
-        "START SESSION";
+
+            return `
+
+                <article
+                    class="history-card"
+                >
+
+                    <div class="history-top">
+
+                        <div>
+
+                            <h3>
+                                ${escapeHTML(
+                                    session.day
+                                )}
+                                —
+                                ${escapeHTML(
+                                    session.category
+                                )}
+                            </h3>
+
+                            <p>
+                                ${readableDate}
+                            </p>
+
+                        </div>
+
+                    </div>
 
 
-    renderExercises(
-        structure.category
-    );
+                    <div
+                        class="history-metrics"
+                    >
+
+                        <div
+                            class="history-metric"
+                        >
+
+                            <span>
+                                EXERCISES
+                            </span>
+
+                            <strong>
+                                ${
+                                    session.exercises
+                                        ?.length || 0
+                                }
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            class="history-metric"
+                        >
+
+                            <span>
+                                DURATION
+                            </span>
+
+                            <strong>
+                                ${
+                                    session.duration || 0
+                                } min
+                            </strong>
+
+                        </div>
+
+
+                        <div
+                            class="history-metric"
+                        >
+
+                            <span>
+                                SETS
+                            </span>
+
+                            <strong>
+                                ${completion}%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }).join("");
 
 }
 
 
-// ==========================================
-// STATISTICS
-// ==========================================
+/* =========================================================
+   STATISTICS
+========================================================= */
 
 function updateStatistics() {
 
     if (trainingDays) {
 
-        const uniqueDays =
-            new Set(
-                completedSessions.map(
-                    session =>
-                        session.day
-                )
-            );
-
-
         trainingDays.textContent =
-            uniqueDays.size;
+            Object.keys(
+                weeklyStructure
+            ).length;
 
     }
 
@@ -1488,209 +2119,401 @@ function updateStatistics() {
     if (sessionCount) {
 
         sessionCount.textContent =
-            completedSessions.length;
+            getStoredSessions().length;
 
     }
 
 }
 
 
-// ==========================================
-// TRAINING HISTORY
-// ==========================================
+/* =========================================================
+   PROFILE
+========================================================= */
 
-function renderTrainingHistory() {
+function loadProfile() {
 
-    if (!historyList) {
-        return;
-    }
-
-
-    const sessions =
-        getStoredSessions();
+    const goal =
+        localStorage.getItem(
+            "hpl_goal"
+        ) ||
+        "General Performance";
 
 
-    if (sessions.length === 0) {
+    if (profileGoalText) {
 
-        historyList.innerHTML = `
-
-            <div class="empty-state">
-
-                <h3>
-                    No training history yet
-                </h3>
-
-                <p>
-                    Complete your first workout
-                    and it will appear here.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
+        profileGoalText.textContent =
+            goal;
 
     }
 
 
-    const newestFirst =
-        [...sessions].reverse();
+    goalOptions.forEach(option => {
+
+        option.classList.toggle(
+            "active",
+            option.dataset.goal === goal
+        );
+
+    });
+
+}
 
 
-    let html = "";
+goalOptions.forEach(option => {
+
+    option.addEventListener(
+        "click",
+        () => {
+
+            const goal =
+                option.dataset.goal;
 
 
-    newestFirst.forEach(
-        session => {
-
-            const date =
-                new Date(
-                    session.date
-                );
+            localStorage.setItem(
+                "hpl_goal",
+                goal
+            );
 
 
-            const readableDate =
-                date.toLocaleDateString(
-                    undefined,
-                    {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric"
-                    }
-                );
-
-
-            const totalExercises =
-                session.exercises
-                    ? session.exercises.length
-                    : 0;
-
-
-            html += `
-
-                <div class="history-card">
-
-                    <div class="history-main">
-
-                        <span class="history-day">
-                            ${session.day}
-                        </span>
-
-                        <h3>
-                            ${session.category}
-                        </h3>
-
-                        <p>
-                            ${readableDate}
-                        </p>
-
-                    </div>
-
-
-                    <div class="history-stats">
-
-                        <div>
-
-                            <strong>
-                                ${totalExercises}
-                            </strong>
-
-                            <span>
-                                Exercises
-                            </span>
-
-                        </div>
-
-
-                        <div>
-
-                            <strong>
-                                ${session.duration || 0}
-                            </strong>
-
-                            <span>
-                                Minutes
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <span class="history-complete">
-                        ✓ COMPLETED
-                    </span>
-
-                </div>
-
-            `;
+            loadProfile();
 
         }
     );
 
+});
 
-    historyList.innerHTML =
-        html;
+
+/* =========================================================
+   PWA INSTALLATION
+========================================================= */
+
+function isStandalone() {
+
+    return (
+        window.matchMedia(
+            "(display-mode: standalone)"
+        ).matches
+        ||
+        window.navigator.standalone === true
+    );
 
 }
 
 
-// ==========================================
-// INITIALIZE APP
-// ==========================================
+function showInstallButtons() {
+
+    if (installButton) {
+
+        installButton.classList.remove(
+            "hidden"
+        );
+
+    }
+
+    if (profileInstallButton) {
+
+        profileInstallButton.classList.remove(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+function hideInstallButtons() {
+
+    if (installButton) {
+
+        installButton.classList.add(
+            "hidden"
+        );
+
+    }
+
+    if (profileInstallButton) {
+
+        profileInstallButton.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+function updateInstallStatus(
+    message
+) {
+
+    if (installStatus) {
+
+        installStatus.textContent =
+            message;
+
+    }
+
+}
+
+
+window.addEventListener(
+    "beforeinstallprompt",
+    event => {
+
+        event.preventDefault();
+
+        deferredInstallPrompt =
+            event;
+
+
+        showInstallButtons();
+
+        updateInstallStatus(
+            "HPL is ready to install."
+        );
+
+    }
+);
+
+
+async function installHPL() {
+
+    if (
+        !deferredInstallPrompt
+    ) {
+
+        updateInstallStatus(
+            "Use your browser menu → Add to Home Screen / Install HPL."
+        );
+
+        return;
+
+    }
+
+
+    deferredInstallPrompt.prompt();
+
+
+    try {
+
+        const result =
+            await deferredInstallPrompt.userChoice;
+
+
+        if (
+            result.outcome ===
+            "accepted"
+        ) {
+
+            updateInstallStatus(
+                "Installing HPL..."
+            );
+
+        } else {
+
+            updateInstallStatus(
+                "Installation cancelled. You can install later."
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Install prompt error:",
+            error
+        );
+
+    }
+
+
+    deferredInstallPrompt =
+        null;
+
+}
+
+
+window.addEventListener(
+    "appinstalled",
+    () => {
+
+        deferredInstallPrompt =
+            null;
+
+        hideInstallButtons();
+
+        updateInstallStatus(
+            "HPL is installed on this device ✓"
+        );
+
+    }
+);
+
+
+if (installButton) {
+
+    installButton.addEventListener(
+        "click",
+        installHPL
+    );
+
+}
+
+
+if (profileInstallButton) {
+
+    profileInstallButton.addEventListener(
+        "click",
+        installHPL
+    );
+
+}
+
+
+function initializeInstallationUI() {
+
+    if (isStandalone()) {
+
+        hideInstallButtons();
+
+        updateInstallStatus(
+            "HPL is installed and running as an app ✓"
+        );
+
+        return;
+
+    }
+
+
+    updateInstallStatus(
+        "Checking whether this browser supports installation..."
+    );
+
+
+    setTimeout(() => {
+
+        if (
+            !deferredInstallPrompt
+        ) {
+
+            updateInstallStatus(
+                "Install from your browser menu when available."
+            );
+
+        }
+
+    }, 1800);
+
+}
+
+
+/* =========================================================
+   SERVICE WORKER
+========================================================= */
+
+function registerServiceWorker() {
+
+    if (
+        "serviceWorker" in navigator
+    ) {
+
+        window.addEventListener(
+            "load",
+            () => {
+
+                navigator.serviceWorker
+                    .register(
+                        "./service-worker.js"
+                    )
+                    .then(
+                        registration => {
+
+                            console.log(
+                                "HPL service worker registered:",
+                                registration.scope
+                            );
+
+                        }
+                    )
+                    .catch(
+                        error => {
+
+                            console.error(
+                                "HPL service worker registration failed:",
+                                error
+                            );
+
+                        }
+                    );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   HOME BUTTONS
+========================================================= */
+
+function openTodayTraining() {
+
+    selectDay(
+        getTodayName()
+    );
+
+    openScreen(
+        "exercisesScreen"
+    );
+
+}
+
+
+if (todayStartButton) {
+
+    todayStartButton.addEventListener(
+        "click",
+        openTodayTraining
+    );
+
+}
+
+
+if (todayOpenButton) {
+
+    todayOpenButton.addEventListener(
+        "click",
+        openTodayTraining
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 function initializeApp() {
 
-    completedSessions =
-        getStoredSessions();
+    initializeToday();
 
+    loadSavedSession();
+
+    renderExercises();
 
     updateStatistics();
 
+    renderHistory();
 
-    selectDay("Monday");
+    loadProfile();
 
+    initializeInstallationUI();
 
-    renderTrainingHistory();
+    registerServiceWorker();
 
 }
 
 
 initializeApp();
-
-
-// ==========================================
-// SERVICE WORKER
-// ==========================================
-
-if ("serviceWorker" in navigator) {
-
-    window.addEventListener(
-        "load",
-        () => {
-
-            navigator.serviceWorker
-                .register("./service-worker.js")
-
-                .then(() => {
-
-                    console.log(
-                        "HPL service worker registered."
-                    );
-
-                })
-
-                .catch(error => {
-
-                    console.error(
-                        "Service worker registration failed:",
-                        error
-                    );
-
-                });
-
-        }
-    );
-
-}

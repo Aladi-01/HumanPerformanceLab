@@ -1,387 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0b0f14"
+    >
+
+    <meta
+        name="description"
+        content="Human Performance Lab — personal training and performance tracking system"
+    >
+
+    <link
+        rel="manifest"
+        href="./manifest.json"
+    >
 
     <title>Human Performance Lab</title>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
 </head>
 
 <body>
 
-    <!-- =========================
-         TOP NAVIGATION
-    ========================== -->
+<div id="app">
+
+    <!-- ========================= -->
+    <!-- TOP BAR -->
+    <!-- ========================= -->
 
     <header class="topbar">
 
         <div class="brand">
-            <div class="brand-title">
-                HUMAN PERFORMANCE LAB
+
+            <div class="brand-mark">
+                H
             </div>
 
-            <div class="brand-subtitle">
-                PERSONAL PERFORMANCE SYSTEM
+            <div>
+                <strong>HPL</strong>
+                <span>Human Performance Lab</span>
             </div>
+
         </div>
 
-        <div class="system-status">
+        <div class="status-pill">
             <span class="status-dot"></span>
-            LOCAL MODE
+            SYSTEM READY
         </div>
 
     </header>
 
 
-    <!-- =========================
-         MAIN APPLICATION
-    ========================== -->
+    <!-- ========================= -->
+    <!-- MAIN SCREENS -->
+    <!-- ========================= -->
 
-    <main class="app-container">
+    <main class="app-main">
 
 
-        <!-- =========================
-             HERO / DASHBOARD
-        ========================== -->
+        <!-- ========================= -->
+        <!-- HOME -->
+        <!-- ========================= -->
 
-        <section class="hero-section">
+        <section
+            id="homeScreen"
+            class="screen active-screen"
+        >
 
-            <div class="hero-content">
+            <div class="hero">
 
-                <p class="eyebrow">
-                    PERFORMANCE LAB / 001
-                </p>
+                <div class="hero-copy">
 
-                <h1>
-                    Build your body.<br>
-                    Understand the system.
-                </h1>
+                    <span class="eyebrow">
+                        PERFORMANCE ENGINE
+                    </span>
 
-                <p class="hero-description">
-                    A personal training laboratory for developing
-                    strength, endurance, mobility, stability,
-                    coordination and long-term physical capability.
-                </p>
-
-            </div>
-
-
-            <!-- TODAY CARD -->
-
-            <div class="today-card">
-
-                <p class="card-label">
-                    TODAY
-                </p>
-
-                <h2 id="todayCategory">
-                    PUSH
-                </h2>
-
-                <p id="todayDescription">
-                    Upper-body pushing strength and control.
-                </p>
-
-                <div class="today-line"></div>
-
-                <span id="todayDay">
-                    MONDAY
-                </span>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             WEEKLY STRUCTURE
-        ========================== -->
-
-        <section class="section">
-
-            <div class="section-header">
-
-                <div>
-                    <p class="eyebrow">
-                        WEEKLY STRUCTURE
-                    </p>
-
-                    <h2>
-                        Your Training Week
-                    </h2>
-                </div>
-
-            </div>
-
-
-            <div class="week-grid">
-
-                <button class="day-card active"
-                        data-day="Monday">
-
-                    <span>MON</span>
-                    <strong>Push</strong>
-
-                </button>
-
-
-                <button class="day-card"
-                        data-day="Tuesday">
-
-                    <span>TUE</span>
-                    <strong>Pull</strong>
-
-                </button>
-
-
-                <button class="day-card"
-                        data-day="Wednesday">
-
-                    <span>WED</span>
-                    <strong>Legs + Core</strong>
-
-                </button>
-
-
-                <button class="day-card"
-                        data-day="Thursday">
-
-                    <span>THU</span>
-                    <strong>Flex + Mobility</strong>
-
-                </button>
-
-
-                <button class="day-card"
-                        data-day="Friday">
-
-                    <span>FRI</span>
-                    <strong>Stability</strong>
-
-                </button>
-
-
-                <button class="day-card"
-                        data-day="Saturday">
-
-                    <span>SAT</span>
-                    <strong>Endurance</strong>
-
-                </button>
-
-
-                <button class="day-card"
-                        data-day="Sunday">
-
-                    <span>SUN</span>
-                    <strong>Recovery</strong>
-
-                </button>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             QUICK STATS
-        ========================== -->
-
-        <section class="stats-grid">
-
-            <div class="stat-card">
-
-                <span>
-                    TRAINING DAYS
-                </span>
-
-                <strong id="trainingDays">
-                    0
-                </strong>
-
-                <small>
-                    This week
-                </small>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <span>
-                    EXERCISES
-                </span>
-
-                <strong id="exerciseCount">
-                    0
-                </strong>
-
-                <small>
-                    Available
-                </small>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <span>
-                    SESSIONS
-                </span>
-
-                <strong id="sessionCount">
-                    0
-                </strong>
-
-                <small>
-                    Completed
-                </small>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <span>
-                    STORAGE
-                </span>
-
-                <strong>
-                    LOCAL
-                </strong>
-
-                <small>
-                    Works offline
-                </small>
-
-            </div>
-
-        </section>
-
-        <!-- EXERCISE INTELLIGENCE PANEL -->
-<section class="exercise-detail-section" id="exerciseDetailSection">
-    <div class="exercise-detail-header">
-        <div>
-            <span class="section-kicker">EXERCISE INTELLIGENCE</span>
-            <h2 id="detailExerciseName">Select an exercise</h2>
-        </div>
-
-        <button id="closeExerciseDetailBtn" class="secondary-btn">
-            Close
-        </button>
-    </div>
-
-    <div class="exercise-detail-grid">
-
-        <div class="detail-card">
-            <span>Movement</span>
-            <strong id="detailMovement">—</strong>
-        </div>
-
-        <div class="detail-card">
-            <span>Difficulty</span>
-            <strong id="detailDifficulty">—</strong>
-        </div>
-
-        <div class="detail-card">
-            <span>Skill</span>
-            <strong id="detailSkill">—</strong>
-        </div>
-
-        <div class="detail-card">
-            <span>Equipment</span>
-            <strong id="detailEquipment">—</strong>
-        </div>
-
-        <div class="detail-card">
-            <span>Target muscles</span>
-            <strong id="detailMuscles">—</strong>
-        </div>
-
-        <div class="detail-card">
-            <span>Default prescription</span>
-            <strong id="detailPrescription">—</strong>
-        </div>
-
-    </div>
-
-    <div class="detail-information">
-
-        <div class="detail-info-block">
-            <h3>Progression</h3>
-            <p id="detailProgression">—</p>
-        </div>
-
-        <div class="detail-info-block">
-            <h3>Regression</h3>
-            <p id="detailRegression">—</p>
-        </div>
-
-        <div class="detail-info-block">
-            <h3>Technique & notes</h3>
-            <p id="detailNotes">—</p>
-        </div>
-
-    </div>
-</section>
-
-        <!-- =========================
-             CURRENT SESSION
-        ========================== -->
-
-        <section class="section session-section">
-
-            <div class="section-header">
-
-                <div>
-
-                    <p class="eyebrow">
-                        CURRENT SESSION
-                    </p>
-
-                    <h2 id="sessionTitle">
-                        Push Training
-                    </h2>
-
-                </div>
-
-
-                <button
-                    id="startWorkoutBtn"
-                    class="primary-button">
-
-                    START SESSION
-
-                </button>
-
-            </div>
-
-
-            <!-- EXERCISE LIST -->
-
-            <div
-                id="exerciseList"
-                class="exercise-list">
-
-                <div class="empty-state">
-
-                    <div class="empty-icon">
-                        +
-                    </div>
-
-                    <h3>
-                        No exercises selected
-                    </h3>
+                    <h1>
+                        Build your body.<br>
+                        <span>Build your system.</span>
+                    </h1>
 
                     <p>
-                        Your workout builder will appear here.
+                        Your training plan, exercises, sessions and
+                        performance history — all in one place.
                     </p>
+
+                    <div class="hero-actions">
+
+                        <button
+                            id="todayStartButton"
+                            class="primary-button"
+                        >
+                            OPEN TODAY
+                        </button>
+
+                        <button
+                            id="installButton"
+                            class="secondary-button install-button hidden"
+                        >
+                            INSTALL HPL
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="installStatus"
+                        class="install-status"
+                    >
+                        Checking installation...
+                    </div>
+
+                </div>
+
+
+                <div class="hero-orbit">
+
+                    <div class="orbit-ring ring-one"></div>
+                    <div class="orbit-ring ring-two"></div>
+
+                    <div class="orbit-core">
+                        HPL
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TODAY -->
+
+            <div class="section-block">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="eyebrow">
+                            TODAY
+                        </span>
+
+                        <h2 id="todayTitle">
+                            Today's Training
+                        </h2>
+
+                    </div>
+
+                    <span
+                        id="todayDay"
+                        class="date-badge"
+                    >
+                        --
+                    </span>
+
+                </div>
+
+
+                <div class="today-card">
+
+                    <div>
+
+                        <span class="card-label">
+                            FOCUS
+                        </span>
+
+                        <h2 id="todayFocus">
+                            Loading...
+                        </h2>
+
+                        <p id="todayDescription">
+                            Preparing today's training system.
+                        </p>
+
+                    </div>
+
+                    <button
+                        id="todayOpenButton"
+                        class="icon-button"
+                    >
+                        →
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- TOMORROW -->
+
+            <div class="section-block">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="eyebrow">
+                            NEXT
+                        </span>
+
+                        <h2>Tomorrow</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="tomorrow-card">
+
+                    <div class="tomorrow-day">
+                        <span id="tomorrowDay">--</span>
+                    </div>
+
+                    <div class="tomorrow-info">
+
+                        <strong id="tomorrowFocus">
+                            Loading...
+                        </strong>
+
+                        <span id="tomorrowDescription">
+                            --
+                        </span>
+
+                    </div>
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK STATS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <span>
+                        TRAINING DAYS
+                    </span>
+
+                    <strong id="trainingDays">
+                        7
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span>
+                        EXERCISES
+                    </span>
+
+                    <strong id="exerciseCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span>
+                        SESSIONS
+                    </span>
+
+                    <strong id="sessionCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- WEEK -->
+
+            <div class="section-block">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="eyebrow">
+                            WEEKLY STRUCTURE
+                        </span>
+
+                        <h2>Your Training Week</h2>
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="weekGrid"
+                    class="week-grid"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- EXERCISES -->
+        <!-- ========================= -->
+
+        <section
+            id="exercisesScreen"
+            class="screen"
+        >
+
+            <div class="screen-header">
+
+                <span class="eyebrow">
+                    EXERCISE ENGINE
+                </span>
+
+                <h1 id="exerciseScreenTitle">
+                    Monday — Push
+                </h1>
+
+                <p>
+                    Select movements and build your session.
+                </p>
+
+            </div>
+
+
+            <div
+                id="exerciseGrid"
+                class="exercise-grid"
+            ></div>
+
+
+            <div class="session-builder">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            CURRENT SESSION
+                        </span>
+
+                        <h2 id="selectedSessionTitle">
+                            Session Builder
+                        </h2>
+
+                    </div>
+
+                    <span
+                        id="selectedCount"
+                        class="count-badge"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="selectedSession"
+                    class="selected-session"
+                >
+
+                    <div class="empty-state">
+
+                        <strong>
+                            No exercises selected
+                        </strong>
+
+                        <span>
+                            Add exercises above to build your workout.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="session-actions">
+
+                    <button
+                        id="saveSessionButton"
+                        class="secondary-button"
+                    >
+                        SAVE SESSION
+                    </button>
+
+                    <button
+                        id="startWorkoutButton"
+                        class="primary-button"
+                    >
+                        START WORKOUT
+                    </button>
 
                 </div>
 
@@ -389,57 +411,156 @@
 
         </section>
 
-        <section class="history-section">
 
-    <div class="section-label">
-        TRAINING HISTORY
-    </div>
+        <!-- ========================= -->
+        <!-- HISTORY -->
+        <!-- ========================= -->
 
-    <h2>Your Training Record</h2>
+        <section
+            id="historyScreen"
+            class="screen"
+        >
 
-    <p class="section-description">
-        Every completed session is stored locally
-        on this device and remains available offline.
-    </p>
+            <div class="screen-header">
 
-    <div id="historyList" class="history-list">
+                <span class="eyebrow">
+                    PERFORMANCE LOG
+                </span>
 
-        <div class="empty-state">
+                <h1>
+                    Training History
+                </h1>
 
-            <h3>No training history yet</h3>
+                <p>
+                    Your completed sessions are stored locally
+                    on this device.
+                </p>
 
-            <p>
-                Complete your first workout and it
-                will appear here.
-            </p>
+            </div>
 
-        </div>
 
-    </div>
+            <div
+                id="historyList"
+                class="history-list"
+            ></div>
 
-</section>
+        </section>
 
-        <!-- =========================
-             TRAINING PHILOSOPHY
-        ========================== -->
 
-        <section class="philosophy-section">
+        <!-- ========================= -->
+        <!-- PROFILE -->
+        <!-- ========================= -->
 
-            <p class="eyebrow">
-                SYSTEM PRINCIPLE
-            </p>
+        <section
+            id="profileScreen"
+            class="screen"
+        >
 
-            <h2>
-                Minimum effective training.
-                Maximum useful stimulus.
-            </h2>
+            <div class="screen-header">
 
-            <p>
-                The goal isn't to perform as many exercises as possible.
-                The goal is to select the smallest amount of training
-                that produces meaningful adaptation while leaving enough
-                recovery capacity for long-term progression.
-            </p>
+                <span class="eyebrow">
+                    PERFORMANCE PROFILE
+                </span>
+
+                <h1>
+                    Your System
+                </h1>
+
+                <p>
+                    Keep your profile focused on performance,
+                    training and consistency.
+                </p>
+
+            </div>
+
+
+            <div class="profile-card">
+
+                <div class="profile-avatar">
+                    HPL
+                </div>
+
+                <div>
+
+                    <span class="card-label">
+                        TRAINING PROFILE
+                    </span>
+
+                    <h2 id="profileGoalText">
+                        General Performance
+                    </h2>
+
+                    <p>
+                        Your profile stays on this device.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="profile-section">
+
+                <span class="eyebrow">
+                    PRIMARY FOCUS
+                </span>
+
+                <div class="goal-options">
+
+                    <button
+                        class="goal-option"
+                        data-goal="Strength & Control"
+                    >
+                        Strength & Control
+                    </button>
+
+                    <button
+                        class="goal-option"
+                        data-goal="Mobility"
+                    >
+                        Mobility
+                    </button>
+
+                    <button
+                        class="goal-option"
+                        data-goal="Endurance"
+                    >
+                        Endurance
+                    </button>
+
+                    <button
+                        class="goal-option"
+                        data-goal="General Performance"
+                    >
+                        General Performance
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="profile-note">
+
+                <strong>
+                    HPL principle
+                </strong>
+
+                <p>
+                    Progress is measured through consistency,
+                    movement quality, completed training and
+                    performance — not appearance.
+                </p>
+
+            </div>
+
+
+            <button
+                id="profileInstallButton"
+                class="secondary-button profile-install-button hidden"
+            >
+                INSTALL HPL APP
+            </button>
 
         </section>
 
@@ -447,14 +568,207 @@
     </main>
 
 
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
+    <!-- ========================= -->
+    <!-- BOTTOM NAVIGATION -->
+    <!-- ========================= -->
 
-    <script src="data/exercises.js"></script>
-<script src="data/storage.js"></script>
-<script src="app.js"></script>
+    <nav class="bottom-nav">
+
+        <button
+            class="nav-item active"
+            data-screen="homeScreen"
+        >
+            <span>⌂</span>
+            <small>Home</small>
+        </button>
+
+
+        <button
+            class="nav-item"
+            data-screen="exercisesScreen"
+        >
+            <span>◈</span>
+            <small>Train</small>
+        </button>
+
+
+        <button
+            class="nav-item"
+            data-screen="historyScreen"
+        >
+            <span>▣</span>
+            <small>History</small>
+        </button>
+
+
+        <button
+            class="nav-item"
+            data-screen="profileScreen"
+        >
+            <span>◉</span>
+            <small>Profile</small>
+        </button>
+
+    </nav>
+
+
+    <!-- ========================= -->
+    <!-- EXERCISE MODAL -->
+    <!-- ========================= -->
+
+    <div
+        id="exerciseModal"
+        class="modal hidden"
+    >
+
+        <div class="modal-backdrop"></div>
+
+        <div class="modal-card">
+
+            <button
+                id="modalClose"
+                class="modal-close"
+            >
+                ×
+            </button>
+
+            <span
+                id="modalExerciseCategory"
+                class="eyebrow"
+            >
+                EXERCISE
+            </span>
+
+            <h2 id="modalExerciseTitle">
+                Exercise
+            </h2>
+
+            <div
+                id="modalExerciseBody"
+                class="modal-body"
+            ></div>
+
+            <button
+                id="modalAddExercise"
+                class="primary-button"
+            >
+                ADD TO SESSION
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- ACTIVE WORKOUT -->
+    <!-- ========================= -->
+
+    <section
+        id="workoutScreen"
+        class="workout-screen hidden"
+    >
+
+        <div class="workout-top">
+
+            <button
+                id="exitWorkoutButton"
+                class="workout-exit"
+            >
+                ×
+            </button>
+
+            <div>
+
+                <span class="eyebrow">
+                    ACTIVE SESSION
+                </span>
+
+                <h2 id="activeWorkoutTitle">
+                    Workout
+                </h2>
+
+            </div>
+
+            <div
+                id="workoutTimer"
+                class="workout-timer"
+            >
+                00:00:00
+            </div>
+
+        </div>
+
+
+        <div class="workout-progress-area">
+
+            <div class="progress-label">
+
+                <span>
+                    SESSION PROGRESS
+                </span>
+
+                <strong id="workoutProgressText">
+                    0%
+                </strong>
+
+            </div>
+
+            <div class="progress-track">
+
+                <div
+                    id="workoutProgressBar"
+                    class="progress-bar"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="activeWorkoutContent"
+            class="active-workout-content"
+        ></div>
+
+
+        <div class="workout-bottom">
+
+            <button
+                id="completeSetButton"
+                class="primary-button"
+            >
+                COMPLETE SET
+            </button>
+
+            <button
+                id="nextExerciseButton"
+                class="secondary-button"
+            >
+                NEXT EXERCISE
+            </button>
+
+            <button
+                id="finishWorkoutButton"
+                class="danger-button"
+            >
+                FINISH WORKOUT
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- SCRIPTS -->
+<!-- ========================= -->
+
+<script src="./data/exercises.js"></script>
+<script src="./data/storage.js"></script>
+<script src="./app.js"></script>
 
 </body>
-
 </html>
