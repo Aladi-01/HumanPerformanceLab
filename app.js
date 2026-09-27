@@ -4,7 +4,9 @@
 // ==========================================
 
 
-// ---------- WEEKLY STRUCTURE ----------
+// ==========================================
+// WEEKLY STRUCTURE
+// ==========================================
 
 const weeklyStructure = {
 
@@ -46,7 +48,9 @@ const weeklyStructure = {
 };
 
 
-// ---------- DOM ELEMENTS ----------
+// ==========================================
+// DOM ELEMENTS
+// ==========================================
 
 const dayCards =
     document.querySelectorAll(".day-card");
@@ -56,6 +60,9 @@ const todayCategory =
 
 const todayDescription =
     document.getElementById("todayDescription");
+
+const todayDay =
+    document.getElementById("todayDay");
 
 const sessionTitle =
     document.getElementById("sessionTitle");
@@ -75,8 +82,54 @@ const exerciseCount =
 const sessionCount =
     document.getElementById("sessionCount");
 
+const historyList =
+    document.getElementById("historyList");
 
-// ---------- APP STATE ----------
+
+// ==========================================
+// EXERCISE DETAIL DOM ELEMENTS
+// ==========================================
+
+const exerciseDetailSection =
+    document.getElementById("exerciseDetailSection");
+
+const detailExerciseName =
+    document.getElementById("detailExerciseName");
+
+const detailMovement =
+    document.getElementById("detailMovement");
+
+const detailDifficulty =
+    document.getElementById("detailDifficulty");
+
+const detailSkill =
+    document.getElementById("detailSkill");
+
+const detailEquipment =
+    document.getElementById("detailEquipment");
+
+const detailMuscles =
+    document.getElementById("detailMuscles");
+
+const detailPrescription =
+    document.getElementById("detailPrescription");
+
+const detailProgression =
+    document.getElementById("detailProgression");
+
+const detailRegression =
+    document.getElementById("detailRegression");
+
+const detailNotes =
+    document.getElementById("detailNotes");
+
+const closeExerciseDetailBtn =
+    document.getElementById("closeExerciseDetailBtn");
+
+
+// ==========================================
+// APP STATE
+// ==========================================
 
 let currentDay = "Monday";
 
@@ -92,7 +145,9 @@ let workoutTimer = null;
 let workoutStartTime = null;
 
 
-// ---------- GET EXERCISES ----------
+// ==========================================
+// GET EXERCISES FOR CATEGORY
+// ==========================================
 
 function getExercisesForCategory(category) {
 
@@ -103,22 +158,132 @@ function getExercisesForCategory(category) {
         );
 
         return [];
+
     }
 
     return window.exerciseDatabase.filter(
         exercise =>
             exercise.category === category
     );
+
 }
 
 
-// ---------- RENDER EXERCISES ----------
+// ==========================================
+// SHOW EXERCISE DETAILS
+// ==========================================
+
+function showExerciseDetails(exercise) {
+
+    if (!exercise || !exerciseDetailSection) {
+        return;
+    }
+
+    if (detailExerciseName) {
+        detailExerciseName.textContent =
+            exercise.name || "Unknown Exercise";
+    }
+
+    if (detailMovement) {
+        detailMovement.textContent =
+            exercise.movement || "—";
+    }
+
+    if (detailDifficulty) {
+        detailDifficulty.textContent =
+            exercise.difficulty || "—";
+    }
+
+    if (detailSkill) {
+        detailSkill.textContent =
+            exercise.skill || "—";
+    }
+
+    if (detailEquipment) {
+        detailEquipment.textContent =
+            exercise.equipment || "None";
+    }
+
+    if (detailMuscles) {
+
+        detailMuscles.textContent =
+            Array.isArray(exercise.muscles)
+                ? exercise.muscles.join(", ")
+                : exercise.muscles || "—";
+
+    }
+
+    if (detailPrescription) {
+
+        detailPrescription.textContent =
+            `${exercise.defaultSets || "—"} sets × ` +
+            `${exercise.defaultReps || "—"} | ` +
+            `Rest: ${exercise.rest || "—"}`;
+
+    }
+
+    if (detailProgression) {
+
+        detailProgression.textContent =
+            exercise.progression ||
+            "No progression defined yet.";
+
+    }
+
+    if (detailRegression) {
+
+        detailRegression.textContent =
+            exercise.regression ||
+            "No regression defined yet.";
+
+    }
+
+    if (detailNotes) {
+
+        detailNotes.textContent =
+            exercise.notes ||
+            "No additional notes.";
+
+    }
+
+    exerciseDetailSection.classList.add("visible");
+
+    exerciseDetailSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+// ==========================================
+// CLOSE EXERCISE DETAILS
+// ==========================================
+
+if (closeExerciseDetailBtn) {
+
+    closeExerciseDetailBtn.addEventListener(
+        "click",
+        () => {
+
+            exerciseDetailSection.classList.remove(
+                "visible"
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// RENDER EXERCISES
+// ==========================================
 
 function renderExercises(category) {
 
     const exercises =
         getExercisesForCategory(category);
-
 
     let html = `
 
@@ -141,6 +306,10 @@ function renderExercises(category) {
     `;
 
 
+    // --------------------------------------
+    // NO EXERCISES
+    // --------------------------------------
+
     if (exercises.length === 0) {
 
         html += `
@@ -160,7 +329,14 @@ function renderExercises(category) {
 
         `;
 
-    } else {
+    }
+
+
+    // --------------------------------------
+    // EXERCISE CARDS
+    // --------------------------------------
+
+    else {
 
         exercises.forEach(exercise => {
 
@@ -173,7 +349,10 @@ function renderExercises(category) {
 
             html += `
 
-                <div class="exercise-card">
+                <div
+                    class="exercise-card"
+                    data-exercise-id="${exercise.id}"
+                >
 
                     <div class="exercise-info">
 
@@ -187,7 +366,11 @@ function renderExercises(category) {
 
                         <p>
                             <strong>Muscles:</strong>
-                            ${exercise.muscles.join(", ")}
+                            ${
+                                Array.isArray(exercise.muscles)
+                                    ? exercise.muscles.join(", ")
+                                    : exercise.muscles || "—"
+                            }
                         </p>
 
                         <p>
@@ -206,6 +389,10 @@ function renderExercises(category) {
                             sets ×
                             ${exercise.defaultReps}
                         </p>
+
+                        <small class="click-hint">
+                            CLICK CARD FOR EXERCISE INTELLIGENCE
+                        </small>
 
                     </div>
 
@@ -246,17 +433,11 @@ function renderExercises(category) {
                 </h3>
 
                 <p>
-
                     ${
                         currentSession.length === 0
-
                             ? "No exercises selected yet."
-
-                            : `${currentSession.length}
-                               exercise(s) selected.`
-
+                            : `${currentSession.length} exercise(s) selected.`
                     }
-
                 </p>
 
             </div>
@@ -264,7 +445,9 @@ function renderExercises(category) {
     `;
 
 
-    // ---------- EMPTY SESSION ----------
+    // --------------------------------------
+    // EMPTY SESSION
+    // --------------------------------------
 
     if (currentSession.length === 0) {
 
@@ -286,7 +469,10 @@ function renderExercises(category) {
 
     }
 
-    // ---------- SELECTED SESSION ----------
+
+    // --------------------------------------
+    // SELECTED SESSION
+    // --------------------------------------
 
     else {
 
@@ -369,17 +555,78 @@ function renderExercises(category) {
 
     attachSaveButton();
 
+    attachExerciseDetailButtons();
+
 }
 
 
-// ---------- ADD EXERCISE ----------
+// ==========================================
+// EXERCISE DETAIL BUTTON EVENTS
+// ==========================================
+
+function attachExerciseDetailButtons() {
+
+    const cards =
+        document.querySelectorAll(
+            ".exercise-card"
+        );
+
+
+    cards.forEach(card => {
+
+        card.addEventListener(
+            "click",
+            event => {
+
+                // Don't open details when clicking ADD.
+                if (
+                    event.target.closest(
+                        ".add-exercise-btn"
+                    )
+                ) {
+                    return;
+                }
+
+
+                const id =
+                    card.dataset.exerciseId;
+
+
+                const exercise =
+                    window.exerciseDatabase.find(
+                        item =>
+                            String(item.id) ===
+                            String(id)
+                    );
+
+
+                if (exercise) {
+
+                    showExerciseDetails(
+                        exercise
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+}
+
+
+// ==========================================
+// ADD EXERCISE
+// ==========================================
 
 function addExerciseToSession(id) {
 
     const exercise =
         window.exerciseDatabase.find(
             item =>
-                item.id === id
+                String(item.id) ===
+                String(id)
         );
 
 
@@ -391,7 +638,8 @@ function addExerciseToSession(id) {
     const alreadyExists =
         currentSession.some(
             item =>
-                item.id === id
+                String(item.id) ===
+                String(id)
         );
 
 
@@ -410,14 +658,17 @@ function addExerciseToSession(id) {
 }
 
 
-// ---------- REMOVE EXERCISE ----------
+// ==========================================
+// REMOVE EXERCISE
+// ==========================================
 
 function removeExerciseFromSession(id) {
 
     currentSession =
         currentSession.filter(
             exercise =>
-                exercise.id !== id
+                String(exercise.id) !==
+                String(id)
         );
 
 
@@ -428,7 +679,9 @@ function removeExerciseFromSession(id) {
 }
 
 
-// ---------- ADD BUTTON EVENTS ----------
+// ==========================================
+// ADD BUTTON EVENTS
+// ==========================================
 
 function attachExerciseButtons() {
 
@@ -442,7 +695,9 @@ function attachExerciseButtons() {
 
         button.addEventListener(
             "click",
-            () => {
+            event => {
+
+                event.stopPropagation();
 
                 const id =
                     button.dataset.id;
@@ -457,7 +712,9 @@ function attachExerciseButtons() {
 }
 
 
-// ---------- REMOVE BUTTON EVENTS ----------
+// ==========================================
+// REMOVE BUTTON EVENTS
+// ==========================================
 
 function attachRemoveButtons() {
 
@@ -471,7 +728,9 @@ function attachRemoveButtons() {
 
         button.addEventListener(
             "click",
-            () => {
+            event => {
+
+                event.stopPropagation();
 
                 const id =
                     button.dataset.id;
@@ -486,7 +745,9 @@ function attachRemoveButtons() {
 }
 
 
-// ---------- SAVE SESSION PLAN ----------
+// ==========================================
+// SAVE SESSION PLAN
+// ==========================================
 
 function attachSaveButton() {
 
@@ -518,6 +779,7 @@ function saveSessionPlan() {
         );
 
         return;
+
     }
 
 
@@ -532,12 +794,18 @@ function saveSessionPlan() {
 }
 
 
-// ---------- START WORKOUT ----------
+// ==========================================
+// START WORKOUT
+// ==========================================
 
-startWorkoutBtn.addEventListener(
-    "click",
-    startWorkout
-);
+if (startWorkoutBtn) {
+
+    startWorkoutBtn.addEventListener(
+        "click",
+        startWorkout
+    );
+
+}
 
 
 function startWorkout() {
@@ -549,6 +817,7 @@ function startWorkout() {
         );
 
         return;
+
     }
 
 
@@ -592,7 +861,9 @@ function startWorkout() {
 }
 
 
-// ---------- WORKOUT TIMER ----------
+// ==========================================
+// WORKOUT TIMER
+// ==========================================
 
 function startWorkoutTimer() {
 
@@ -682,7 +953,9 @@ function updateWorkoutTimer() {
 }
 
 
-// ---------- RENDER ACTIVE WORKOUT ----------
+// ==========================================
+// RENDER ACTIVE WORKOUT
+// ==========================================
 
 function renderActiveWorkout() {
 
@@ -864,7 +1137,9 @@ function renderActiveWorkout() {
 }
 
 
-// ---------- SET BUTTONS ----------
+// ==========================================
+// SET BUTTONS
+// ==========================================
 
 function attachSetButtons() {
 
@@ -906,7 +1181,6 @@ function attachSetButtons() {
 
                     exercise.completedSets++;
 
-
                     renderActiveWorkout();
 
                 }
@@ -919,7 +1193,9 @@ function attachSetButtons() {
 }
 
 
-// ---------- FINISH WORKOUT ----------
+// ==========================================
+// FINISH WORKOUT
+// ==========================================
 
 function finishWorkout() {
 
@@ -988,12 +1264,8 @@ function finishWorkout() {
     };
 
 
-    // STOP TIMER FIRST
-
     stopWorkoutTimer();
 
-
-    // SAVE EXACTLY ONCE
 
     const saved =
         saveSession(session);
@@ -1006,14 +1278,13 @@ function finishWorkout() {
         );
 
         return;
+
     }
 
 
     completedSessions =
         getStoredSessions();
 
-
-    // RESET WORKOUT STATE
 
     activeWorkout = null;
 
@@ -1037,6 +1308,7 @@ function finishWorkout() {
     updateStatistics();
 
     renderTrainingHistory();
+
 
     renderExercises(
         weeklyStructure[currentDay]
@@ -1062,7 +1334,9 @@ function finishWorkout() {
 }
 
 
-// ---------- DAY SELECTION ----------
+// ==========================================
+// DAY SELECTION
+// ==========================================
 
 dayCards.forEach(card => {
 
@@ -1088,8 +1362,6 @@ function selectDay(day) {
     }
 
 
-    // Don't destroy an active workout accidentally
-
     if (activeWorkout) {
 
         alert(
@@ -1097,6 +1369,7 @@ function selectDay(day) {
         );
 
         return;
+
     }
 
 
@@ -1104,8 +1377,6 @@ function selectDay(day) {
 
     currentSession = [];
 
-
-    // Active visual state
 
     dayCards.forEach(card => {
 
@@ -1135,8 +1406,6 @@ function selectDay(day) {
         weeklyStructure[day];
 
 
-    // TODAY CARD
-
     if (todayCategory) {
 
         todayCategory.textContent =
@@ -1153,7 +1422,13 @@ function selectDay(day) {
     }
 
 
-    // SESSION TITLE
+    if (todayDay) {
+
+        todayDay.textContent =
+            day.toUpperCase();
+
+    }
+
 
     if (sessionTitle) {
 
@@ -1163,16 +1438,12 @@ function selectDay(day) {
     }
 
 
-    // START BUTTON
-
     startWorkoutBtn.disabled =
         false;
 
     startWorkoutBtn.textContent =
         "START SESSION";
 
-
-    // RENDER EXERCISES
 
     renderExercises(
         structure.category
@@ -1181,11 +1452,11 @@ function selectDay(day) {
 }
 
 
-// ---------- STATISTICS ----------
+// ==========================================
+// STATISTICS
+// ==========================================
 
 function updateStatistics() {
-
-    // Completed training days
 
     if (trainingDays) {
 
@@ -1204,8 +1475,6 @@ function updateStatistics() {
     }
 
 
-    // Exercise database count
-
     if (exerciseCount) {
 
         exerciseCount.textContent =
@@ -1215,8 +1484,6 @@ function updateStatistics() {
 
     }
 
-
-    // Completed sessions
 
     if (sessionCount) {
 
@@ -1228,15 +1495,11 @@ function updateStatistics() {
 }
 
 
-// ---------- TRAINING HISTORY ----------
+// ==========================================
+// TRAINING HISTORY
+// ==========================================
 
 function renderTrainingHistory() {
-
-    const historyList =
-        document.getElementById(
-            "historyList"
-        );
-
 
     if (!historyList) {
         return;
@@ -1267,6 +1530,7 @@ function renderTrainingHistory() {
         `;
 
         return;
+
     }
 
 
@@ -1372,7 +1636,9 @@ function renderTrainingHistory() {
 }
 
 
-// ---------- INITIALIZE ----------
+// ==========================================
+// INITIALIZE APP
+// ==========================================
 
 function initializeApp() {
 
@@ -1394,15 +1660,37 @@ function initializeApp() {
 initializeApp();
 
 
-// Register service worker for offline support
+// ==========================================
+// SERVICE WORKER
+// ==========================================
+
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js")
-            .then(() => {
-                console.log("HPL service worker registered.");
-            })
-            .catch(error => {
-                console.error("Service worker registration failed:", error);
-            });
-    });
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator.serviceWorker
+                .register("./service-worker.js")
+
+                .then(() => {
+
+                    console.log(
+                        "HPL service worker registered."
+                    );
+
+                })
+
+                .catch(error => {
+
+                    console.error(
+                        "Service worker registration failed:",
+                        error
+                    );
+
+                });
+
+        }
+    );
+
 }

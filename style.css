@@ -8,15 +8,11 @@
     --panel: #11161b;
     --panel-light: #171d23;
     --border: #273039;
-
     --text: #f2f5f7;
     --muted: #89939d;
-
     --accent: #65e6a5;
     --accent-soft: rgba(101, 230, 165, 0.12);
-
     --danger: #ff6b6b;
-
     --radius: 14px;
 }
 
@@ -29,6 +25,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
 }
 
 
@@ -76,6 +77,7 @@ body {
 
     position: sticky;
     top: 0;
+
     z-index: 100;
 }
 
@@ -83,7 +85,6 @@ body {
 .brand-title {
     font-size: 15px;
     font-weight: 800;
-
     letter-spacing: 2px;
 }
 
@@ -94,7 +95,6 @@ body {
     color: var(--muted);
 
     font-size: 9px;
-
     letter-spacing: 2px;
 }
 
@@ -102,6 +102,7 @@ body {
 .system-status {
     display: flex;
     align-items: center;
+
     gap: 8px;
 
     color: var(--muted);
@@ -175,7 +176,6 @@ body {
     color: var(--accent);
 
     font-size: 10px;
-
     font-weight: 700;
 
     letter-spacing: 2px;
@@ -317,7 +317,6 @@ body {
     display: flex;
 
     align-items: flex-end;
-
     justify-content: space-between;
 
     gap: 20px;
@@ -352,7 +351,6 @@ body {
 
     display: flex;
     flex-direction: column;
-
     justify-content: space-between;
 
     padding: 18px;
@@ -400,7 +398,8 @@ body {
 .day-card.active {
     background: var(--accent-soft);
 
-    border-color: rgba(101, 230, 165, 0.5);
+    border-color:
+        rgba(101, 230, 165, 0.5);
 }
 
 
@@ -466,8 +465,13 @@ body {
 
 
 /* =========================================
-   PRIMARY BUTTON
+   BUTTONS
 ========================================= */
+
+button {
+    font-family: inherit;
+}
+
 
 .primary-button {
     border: none;
@@ -490,7 +494,8 @@ body {
 
     transition:
         transform 0.2s ease,
-        box-shadow 0.2s ease;
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
 }
 
 
@@ -498,12 +503,24 @@ body {
     transform: translateY(-2px);
 
     box-shadow:
-        0 8px 25px rgba(101, 230, 165, 0.2);
+        0 8px 25px
+        rgba(101, 230, 165, 0.2);
 }
 
 
 .primary-button:active {
     transform: translateY(0);
+}
+
+
+.primary-button:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.55;
+
+    transform: none;
+
+    box-shadow: none;
 }
 
 
@@ -524,9 +541,11 @@ body {
     min-height: 260px;
 
     display: flex;
+
     flex-direction: column;
 
     align-items: center;
+
     justify-content: center;
 
     text-align: center;
@@ -536,6 +555,8 @@ body {
     border: 1px dashed var(--border);
 
     border-radius: var(--radius);
+
+    padding: 30px;
 }
 
 
@@ -575,304 +596,23 @@ body {
 
 
 /* =========================================
-   PHILOSOPHY
-========================================= */
-
-.philosophy-section {
-    max-width: 850px;
-
-    padding: 50px 0;
-
-    border-top: 1px solid var(--border);
-
-    border-bottom: 1px solid var(--border);
-}
-
-
-.philosophy-section h2 {
-    font-size: clamp(30px, 5vw, 52px);
-
-    line-height: 1.05;
-
-    letter-spacing: -2px;
-
-    margin-bottom: 20px;
-}
-
-
-.philosophy-section > p:last-child {
-    max-width: 700px;
-
-    color: var(--muted);
-
-    font-size: 14px;
-}
-
-
-/* =========================================
-   RESPONSIVE
-========================================= */
-
-@media (max-width: 900px) {
-
-    .hero-section {
-        grid-template-columns: 1fr;
-    }
-
-
-    .week-grid {
-        grid-template-columns:
-            repeat(4, 1fr);
-    }
-
-
-    .stats-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-}
-
-
-@media (max-width: 600px) {
-
-    .topbar {
-        padding: 0 20px;
-    }
-
-
-    .system-status {
-        display: none;
-    }
-
-
-    .app-container {
-        width: 92%;
-
-        padding-top: 45px;
-    }
-
-
-    .hero-content h1 {
-        font-size: 44px;
-
-        letter-spacing: -2px;
-    }
-
-
-    .week-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-
-    .stats-grid {
-        grid-template-columns:
-            1fr;
-    }
-
-
-    .section-header {
-        align-items: flex-start;
-
-        flex-direction: column;
-    }
-
-}
-
-
-/* ==========================================
-   TRAINING HISTORY
-   ========================================== */
-
-.history-section {
-    margin-top: 90px;
-    padding-top: 50px;
-    border-top: 1px solid #273038;
-}
-
-
-.history-section h2 {
-    font-size: 36px;
-    margin: 10px 0;
-}
-
-
-.section-description {
-    color: #8c9aa3;
-    max-width: 650px;
-    line-height: 1.7;
-}
-
-
-.history-list {
-    display: grid;
-    gap: 16px;
-    margin-top: 30px;
-}
-
-
-.history-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 30px;
-
-    padding: 24px;
-
-    background: #11161a;
-
-    border: 1px solid #263038;
-
-    border-radius: 14px;
-
-    transition:
-        transform 0.2s ease,
-        border-color 0.2s ease;
-}
-
-
-.history-card:hover {
-    transform: translateY(-3px);
-
-    border-color: #42d99b;
-}
-
-
-.history-day {
-    color: #42d99b;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    letter-spacing: 2px;
-}
-
-
-.history-main h3 {
-    margin: 7px 0;
-
-    font-size: 22px;
-}
-
-
-.history-main p {
-    margin: 0;
-
-    color: #77858e;
-}
-
-
-.history-stats {
-    display: flex;
-    gap: 30px;
-}
-
-
-.history-stats div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-
-.history-stats strong {
-    font-size: 24px;
-}
-
-
-.history-stats span {
-    margin-top: 5px;
-
-    color: #77858e;
-
-    font-size: 12px;
-}
-
-
-.history-complete {
-    color: #42d99b;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    letter-spacing: 1px;
-}
-
-
-/* WORKOUT TIMER */
-
-.workout-timer-card {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 25px;
-
-    margin-bottom: 25px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #111a17,
-            #101519
-        );
-
-    border:
-        1px solid #294b3e;
-
-    border-radius: 14px;
-}
-
-
-.workout-timer-card span {
-    color: #42d99b;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    letter-spacing: 2px;
-}
-
-
-.workout-timer-card strong {
-    margin: 8px 0;
-
-    font-size: 42px;
-
-    letter-spacing: 3px;
-
-    font-variant-numeric:
-        tabular-nums;
-}
-
-
-.workout-timer-card small {
-    color: #77858e;
-}
-
-/* ==========================================
    SESSION BUILDER
-========================================== */
+========================================= */
 
 .exercise-section {
     margin-bottom: 32px;
 }
 
+
 .section-heading {
     margin-bottom: 18px;
 }
 
+
 .section-heading h3 {
     margin-bottom: 6px;
 }
+
 
 .section-heading p {
     color: #89939f;
@@ -881,14 +621,17 @@ body {
 
 .available-exercises {
     display: grid;
+
     gap: 14px;
 }
 
 
 .exercise-card {
     display: flex;
+
     justify-content: space-between;
     align-items: center;
+
     gap: 24px;
 
     padding: 22px;
@@ -898,6 +641,23 @@ body {
     border: 1px solid #26303a;
 
     border-radius: 14px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.exercise-card:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(101, 230, 165, 0.45);
+
+    background: #141b21;
 }
 
 
@@ -923,14 +683,31 @@ body {
 }
 
 
+.click-hint {
+    display: block;
+
+    margin-top: 12px;
+
+    color: #61e7a5;
+
+    font-size: 9px;
+
+    letter-spacing: 1.2px;
+
+    opacity: 0.7;
+}
+
+
 .selected-exercises {
     display: grid;
+
     gap: 12px;
 }
 
 
 .selected-exercise {
     display: flex;
+
     justify-content: space-between;
     align-items: center;
 
@@ -963,6 +740,17 @@ body {
     border-radius: 8px;
 
     cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.remove-exercise-btn:hover {
+    background: rgba(255, 107, 107, 0.08);
+
+    transform: translateY(-1px);
 }
 
 
@@ -971,12 +759,13 @@ body {
 }
 
 
-/* ==========================================
+/* =========================================
    ACTIVE WORKOUT
-========================================== */
+========================================= */
 
 .active-workout {
     display: grid;
+
     gap: 18px;
 }
 
@@ -987,7 +776,6 @@ body {
     flex-direction: column;
 
     align-items: center;
-
     justify-content: center;
 
     padding: 28px;
@@ -1023,7 +811,8 @@ body {
 
     letter-spacing: 3px;
 
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric:
+        tabular-nums;
 }
 
 
@@ -1100,7 +889,8 @@ body {
 
     transition:
         transform 0.15s ease,
-        border-color 0.15s ease;
+        border-color 0.15s ease,
+        background 0.15s ease;
 }
 
 
@@ -1122,9 +912,9 @@ body {
 }
 
 
-/* ==========================================
+/* =========================================
    TRAINING HISTORY
-========================================== */
+========================================= */
 
 .history-section {
     margin-top: 80px;
@@ -1132,11 +922,6 @@ body {
     padding-top: 50px;
 
     border-top: 1px solid #26303a;
-}
-
-
-.history-section h2 {
-    margin-bottom: 10px;
 }
 
 
@@ -1153,10 +938,17 @@ body {
 }
 
 
+.history-section h2 {
+    margin-bottom: 10px;
+}
+
+
 .section-description {
     color: #89939f;
 
     margin-bottom: 24px;
+
+    max-width: 650px;
 }
 
 
@@ -1183,6 +975,17 @@ body {
     border: 1px solid #26303a;
 
     border-radius: 14px;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.history-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #42d99b;
 }
 
 
@@ -1251,11 +1054,306 @@ body {
 }
 
 
-/* ==========================================
-   MOBILE
-========================================== */
+/* =========================================
+   EXERCISE INTELLIGENCE
+========================================= */
+
+.exercise-detail-section {
+    display: none;
+
+    margin-top: 24px;
+
+    padding: 24px;
+
+    border-radius: 18px;
+
+    background: #111820;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.08);
+}
+
+
+.exercise-detail-section.visible {
+    display: block;
+
+    animation:
+        detailReveal 0.3s ease;
+}
+
+
+@keyframes detailReveal {
+
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+.exercise-detail-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 16px;
+
+    margin-bottom: 22px;
+}
+
+
+.section-kicker {
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    opacity: 0.65;
+}
+
+
+.exercise-detail-header h2 {
+    margin: 6px 0 0;
+}
+
+
+.exercise-detail-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+}
+
+
+.detail-card {
+    padding: 16px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255, 255, 255, 0.04);
+}
+
+
+.detail-card span {
+    display: block;
+
+    font-size: 11px;
+
+    opacity: 0.55;
+
+    margin-bottom: 7px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+
+.detail-card strong {
+    display: block;
+
+    line-height: 1.4;
+}
+
+
+.detail-information {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-top: 12px;
+}
+
+
+.detail-info-block {
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+}
+
+
+.detail-info-block h3 {
+    margin-top: 0;
+
+    font-size: 15px;
+}
+
+
+.detail-info-block p {
+    margin-bottom: 0;
+
+    line-height: 1.6;
+
+    opacity: 0.78;
+}
+
+
+.secondary-btn {
+    min-height: 40px;
+
+    padding: 8px 14px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+
+.secondary-btn:hover {
+    border-color: var(--accent);
+
+    color: var(--accent);
+}
+
+
+/* =========================================
+   PHILOSOPHY
+========================================= */
+
+.philosophy-section {
+    max-width: 850px;
+
+    padding: 50px 0;
+
+    border-top: 1px solid var(--border);
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.philosophy-section h2 {
+    font-size:
+        clamp(30px, 5vw, 52px);
+
+    line-height: 1.05;
+
+    letter-spacing: -2px;
+
+    margin-bottom: 20px;
+}
+
+
+.philosophy-section > p:last-child {
+    max-width: 700px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .hero-section {
+        grid-template-columns: 1fr;
+    }
+
+
+    .week-grid {
+        grid-template-columns:
+            repeat(4, 1fr);
+    }
+
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
 
 @media (max-width: 700px) {
+
+    body {
+        padding: 12px;
+
+        font-size: 15px;
+    }
+
+
+    .topbar {
+        height: auto;
+
+        min-height: 64px;
+
+        padding: 16px 14px;
+
+        margin-bottom: 14px;
+    }
+
+
+    .system-status {
+        display: none;
+    }
+
+
+    .app-container {
+        width: 100%;
+
+        padding:
+            35px 0 70px;
+    }
+
+
+    .hero-content h1 {
+        font-size: 44px;
+
+        letter-spacing: -2px;
+    }
+
+
+    .hero-section {
+        margin-bottom: 50px;
+    }
+
+
+    .week-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+    }
+
+
+    .section-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
 
     .exercise-card,
     .selected-exercise,
@@ -1266,10 +1364,38 @@ body {
     }
 
 
+    .exercise-card {
+        width: 100%;
+
+        padding: 16px;
+    }
+
+
+    .exercise-card .primary-button {
+        width: 100%;
+    }
+
+
+    .selected-exercise {
+        gap: 14px;
+    }
+
+
+    .remove-exercise-btn {
+        width: 100%;
+    }
+
+
     .history-stats {
         width: 100%;
 
-        justify-content: space-between;
+        justify-content:
+            space-between;
+    }
+
+
+    .history-complete {
+        align-self: flex-start;
     }
 
 
@@ -1277,108 +1403,64 @@ body {
         font-size: 38px;
     }
 
-}
 
-
-/* =========================================
-   PHASE 2.1 — MOBILE PHONE LAYOUT
-   ========================================= */
-
-@media (max-width: 700px) {
-
-    body {
-        padding: 12px;
-        font-size: 15px;
+    .exercise-detail-section {
+        padding: 16px;
     }
 
-    header {
-        padding: 18px 14px;
-        margin-bottom: 14px;
-    }
 
-    header h1 {
-        font-size: 24px;
-        line-height: 1.2;
-    }
-
-    header p {
-        font-size: 12px;
-    }
-
-    main {
-        width: 100%;
-        margin: 0;
-    }
-
-    section {
-        width: 100%;
-        margin-bottom: 14px;
-    }
-
-    .hero,
-    .dashboard,
-    .stats-grid,
-    .weekly-structure,
-    .session-section,
-    .history-section,
-    .philosophy {
-        width: 100%;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .day-grid,
-    .days-grid {
+    .exercise-detail-grid,
+    .detail-information {
         grid-template-columns: 1fr;
-        gap: 10px;
     }
 
-    .day-card {
-        width: 100%;
-        min-height: 70px;
+
+    .exercise-detail-header {
+        flex-direction: column;
     }
+
 
     button {
         min-height: 44px;
-        font-size: 14px;
-        padding: 10px 14px;
     }
 
-    .exercise-card {
-        width: 100%;
-        padding: 14px;
-    }
 
-    .exercise-list {
-        width: 100%;
-    }
-
-    .selected-session {
-        width: 100%;
-    }
-
-    .active-workout {
-        width: 100%;
-    }
-
-    .history-card {
-        width: 100%;
-        padding: 14px;
-    }
-
-    /* Prevent long text from breaking the layout */
     * {
         max-width: 100%;
-        box-sizing: border-box;
     }
 
-    /* Make tables or wide content scroll instead of breaking the page */
+
     table {
         display: block;
+
         overflow-x: auto;
+
         max-width: 100%;
     }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .week-grid {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .hero-content h1 {
+        font-size: 38px;
+    }
+
+
+    .today-card h2 {
+        font-size: 30px;
+    }
+
 }
